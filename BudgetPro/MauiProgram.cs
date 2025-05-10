@@ -1,0 +1,58 @@
+﻿using BudgetPro.Pages;
+using BudgetPro.Services;
+using BudgetPro.Services.Contracts;
+using BudgetPro.ViewModels;
+using CommunityToolkit.Maui;
+using DotNet.Meteor.HotReload.Plugin;
+using Microsoft.Extensions.Logging;
+
+namespace BudgetPro;
+
+public static class MauiProgram
+{
+	public static MauiApp CreateMauiApp()
+	{
+		var builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp<App>()
+			.UseMauiCommunityToolkit()
+#if DEBUG
+			.EnableHotReload()
+#endif
+			.ConfigureFonts(fonts =>
+			{
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+			});
+
+#if DEBUG
+		builder.Logging.AddDebug();
+#endif
+
+		// Register the services
+		builder.Services.AddSingleton<INavigationService, NavigationService>();
+
+		// Register the pages 
+		builder.Services.AddTransient<MainPage>();
+		builder.Services.AddTransient<BudgetsPage>();
+		builder.Services.AddTransient<ChatPage>();
+		builder.Services.AddTransient<SettingsPage>();
+		builder.Services.AddTransient<AddBudgetPage>();
+		builder.Services.AddTransient<EditBudgetPage>();
+
+
+		// register the view models
+		builder.Services.AddTransient<MainPageViewModel>();
+		builder.Services.AddTransient<BudgetViewModel>();
+		builder.Services.AddTransient<ChatPageViewModel>();
+		// builder.Services.AddTransient<SE>();
+		builder.Services.AddTransient<AddBudgetViewModel>();
+		builder.Services.AddTransient<EditBudgetViewModel>();
+		builder.Services.AddTransient<LoginViewModel>();
+		builder.Services.AddTransient<RegisterViewModel>();
+		builder.Services.AddTransient<SettingsViewModel>();
+
+
+		return builder.Build();
+	}
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BudgetPro.Pages.ChatPage"
+             Title="Community Chat">
+    <Grid RowDefinitions="*,Auto"
+          Padding="10">
+        <!-- Message List -->
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout x:Name="MessagesLayout"
+                                 Spacing="20">
+                <!-- Example Messages (Insert your real messages here) -->
+                <!-- Incoming -->
+                <VerticalStackLayout HorizontalOptions="Start"
+                                     Spacing="2">
+                    <Label Text="Mubila mwamba "
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="Gray" />
+                    <Border BackgroundColor="#E5E5EA"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="10"
+                            MaximumWidthRequest="280">
+                        <Label Text="Found millks and eggs at a cheap price of K5,000"
+                               FontSize="14"
+                               TextColor="Black" />
+                    </Border>
+                    <Label Text="19:45 pM"
+                           FontSize="10"
+                           TextColor="Gray" />
+                </VerticalStackLayout>
+                <VerticalStackLayout HorizontalOptions="Start"
+                                     Spacing="2">
+                    <Label Text="Jane Doe"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="Gray" />
+                    <Border BackgroundColor="#E5E5EA"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="10"
+                            MaximumWidthRequest="280">
+                        <Label Text="Hello! Are we meeting today?"
+                               FontSize="14"
+                               TextColor="Black" />
+                    </Border>
+                    <Label Text="9:15 AM"
+                           FontSize="10"
+                           TextColor="Gray" />
+                </VerticalStackLayout>
+                <!-- Outgoing -->
+                <VerticalStackLayout HorizontalOptions="End"
+                                     Spacing="2">
+                    <Label Text="You"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="Gray"
+                           HorizontalTextAlignment="End" />
+                    <Border BackgroundColor="#210F37"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            Padding="10"
+                            MaximumWidthRequest="280">
+                        <Label Text="Yes, see you at 11!"
+                               FontSize="14"
+                               TextColor="White" />
+                    </Border>
+                    <Label Text="9:17 AM"
+                           FontSize="10"
+                           TextColor="Gray"
+                           HorizontalTextAlignment="End" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+        <!-- Message Input -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,Auto"
+              Padding="0,10,0,0"
+              VerticalOptions="End">
+            <Border StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="#CCCCCC"
+                    BackgroundColor="White"
+                    Padding="10"
+                    VerticalOptions="Center">
+                <Entry x:Name="MessageEntry"
+                       Placeholder="Type a message..."
+                       FontSize="14"
+                       BackgroundColor="Transparent"
+                       TextColor="Black" />
+            </Border>
+            <Button Text="Send"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Grid.Column="1"
+                    BackgroundColor="#210F37"
+                    TextColor="White"
+                    Padding="15,0"
+                    VerticalOptions="Center"
+                    CornerRadius="25" />
+        </Grid>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BudgetPro.MainPage">
+    <ScrollView Padding="10">
+        <Grid RowDefinitions="Auto,*">
+            <VerticalStackLayout Padding="0,0,0,00">
+                <Label Padding="7,10,0,0"
+                       Text="Manage your budgets and track your household items" />
+                <HorizontalStackLayout HorizontalOptions="Center"
+                                       Spacing="20"
+                                       Padding="0,30,0,0"
+                                       Grid.Row="0">
+                    <Border BackgroundColor="#D9D9D9"
+                            WidthRequest="180"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 8"
+                            HeightRequest="80">
+                        <VerticalStackLayout>
+                            <Label HorizontalOptions="Center"
+                                   Padding="0,8,0,0"
+                                   Text="Total Budgeted" />
+                            <Label HorizontalOptions="Center"
+                                   Padding="0,5,0,0"
+                                   FontAttributes="Bold"
+                                   FontSize="19"
+                                   Text="K5,900,00" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border BackgroundColor="#D9D9D9"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 8"
+                            WidthRequest="180"
+                            HeightRequest="80">
+                        <VerticalStackLayout>
+                            <Label HorizontalOptions="Center"
+                                   Padding="0,8,0,0"
+                                   Text="Total Spent" />
+                            <Label HorizontalOptions="Center"
+                                   Padding="0,5,0,0"
+                                   FontAttributes="Bold"
+                                   FontSize="19"
+                                   Text="K5,900,00" />
+                        </VerticalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+                <Button Margin="10"
+                        Background="#D9D9D9"
+                        WidthRequest="383"
+                        Text="Create Budget"
+                        TextColor="Black"
+                        Command="{Binding AddBudgetCommand}" />
+            </VerticalStackLayout>
+            <VerticalStackLayout Padding="10,30,10,0"
+                                 Spacing="5"
+                                 Grid.Row="1">
+                <Label Padding="0,10"
+                       Text="Budgets" />
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#D9D9D9">
+                    <VerticalStackLayout Padding="10"
+                                         Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Vacation Fund"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start" />
+                            <Label Text="76%"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="End" />
+                        </Grid>
+                        <ProgressBar Progress="0.76"
+                                     ProgressColor="#210F37"
+                                     HeightRequest="10"
+                                     Margin="0,5,0,0" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Border Grid.Column="0"
+                                    WidthRequest="100"
+                                    HeightRequest="20"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 8"
+                                    BackgroundColor="#210F37"
+                                    HorizontalOptions="Start">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           Text="Travel"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <HorizontalStackLayout Grid.Column="1"
+                                                   Spacing="10"
+                                                   HorizontalOptions="End">
+                                <Label Text="Details"
+                                       FontSize="16"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                                <Image Source="arrow.png"
+                                       HorizontalOptions="End"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
