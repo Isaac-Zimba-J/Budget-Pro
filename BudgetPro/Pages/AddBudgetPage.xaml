@@ -11,7 +11,8 @@
                 <Entry Placeholder="Amount"
                        Keyboard="Numeric" />
             </VerticalStackLayout>
-            <Grid ColumnDefinitions="*,Auto">
+            <Grid ColumnDefinitions="*,Auto"
+                  Padding="0,0,0,0">
                 <Label Text="Items"
                        VerticalOptions="Center"
                        Grid.Column="0" />
