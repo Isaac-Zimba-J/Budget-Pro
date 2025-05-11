@@ -68,6 +68,10 @@
               "target": "Package",
               "version": "[3.3.0, )"
             },
+            "Google.Cloud.Firestore": {
+              "target": "Package",
+              "version": "[3.10.0, )"
+            },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
               "version": "[9.0.4, )"
@@ -122,6 +126,10 @@
             "DotNetMeteor.HotReload.Plugin": {
               "target": "Package",
               "version": "[3.3.0, )"
+            },
+            "Google.Cloud.Firestore": {
+              "target": "Package",
+              "version": "[3.10.0, )"
             },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
@@ -178,6 +186,10 @@
               "target": "Package",
               "version": "[3.3.0, )"
             },
+            "Google.Cloud.Firestore": {
+              "target": "Package",
+              "version": "[3.10.0, )"
+            },
             "Microsoft.Extensions.Logging.Debug": {
               "target": "Package",
               "version": "[9.0.4, )"
@@ -221,7 +233,16 @@
         }
       },
       "runtimes": {
+        "android-arm64": {
+          "#import": []
+        },
+        "android-x64": {
+          "#import": []
+        },
         "iossimulator-x64": {
+          "#import": []
+        },
+        "maccatalyst-x64": {
           "#import": []
         }
       }
