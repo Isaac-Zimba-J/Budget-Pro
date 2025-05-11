@@ -5,6 +5,7 @@ using BudgetPro.ViewModels;
 using CommunityToolkit.Maui;
 using DotNet.Meteor.HotReload.Plugin;
 using Microsoft.Extensions.Logging;
+using Zimba.Maui;
 
 namespace BudgetPro;
 
@@ -16,6 +17,8 @@ public static class MauiProgram
 		builder
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit()
+
+
 #if DEBUG
 			.EnableHotReload()
 #endif
@@ -39,13 +42,15 @@ public static class MauiProgram
 		builder.Services.AddTransient<SettingsPage>();
 		builder.Services.AddTransient<AddBudgetPage>();
 		builder.Services.AddTransient<EditBudgetPage>();
+		builder.Services.AddSingleton<AddItemPage>();
+		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddTransient<RegisterPage>();
 
 
 		// register the view models
 		builder.Services.AddTransient<MainPageViewModel>();
 		builder.Services.AddTransient<BudgetViewModel>();
 		builder.Services.AddTransient<ChatPageViewModel>();
-		// builder.Services.AddTransient<SE>();
 		builder.Services.AddTransient<AddBudgetViewModel>();
 		builder.Services.AddTransient<EditBudgetViewModel>();
 		builder.Services.AddTransient<LoginViewModel>();

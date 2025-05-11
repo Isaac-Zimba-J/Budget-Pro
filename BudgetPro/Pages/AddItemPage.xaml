@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               x:Class="BudgetPro.Pages.AddItemPage"
+               xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui">
+    <VerticalStackLayout>
+        <Border HeightRequest="350"
+                WidthRequest="250"
+                StrokeThickness="1"
+                Stroke="LightGray"
+                BackgroundColor="White">
+            <VerticalStackLayout Spacing="15"
+                                 Padding="20">
+                <Label Text="Add Item"
+                       FontSize="18"
+                       FontAttributes="Bold" />
+                <Entry Placeholder="Item Name" />
+                <Entry Placeholder="Amount"
+                       Keyboard="Numeric" />
+                <HorizontalStackLayout Spacing="5"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center">
+                    <Button Text="−"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            FontSize="20"
+                            BackgroundColor="Transparent"
+                            CornerRadius="30"
+                            TextColor="Black"
+                            Clicked="DecreaseValue" />
+                    <Label x:Name="StepperValue"
+                           Text="1"
+                           FontAttributes="Bold"
+                           FontSize="22"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+                    <Button Text="+"
+                            WidthRequest="30"
+                            HeightRequest="30"
+                            FontSize="20"
+                            BackgroundColor="Transparent"
+                            CornerRadius="15"
+                            TextColor="Black"
+                            Clicked="IncreaseValue" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="10"
+                                       HorizontalOptions="CenterAndExpand">
+                    <Button Text="Cancel"
+                            WidthRequest="80"
+                            HeightRequest="35"
+                            BackgroundColor="LightGray"
+                            TextColor="Black"
+                            Clicked="CancelButtonClicked" />
+                    <Button Text="Save"
+                            WidthRequest="80"
+                            HeightRequest="35"
+                            BackgroundColor="#210F37"
+                            TextColor="White"
+                            Clicked="SaveButtonClicked" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</toolkit:Popup>

@@ -2382,6 +2382,22 @@
             "related": ".aar;.pdb;.xml"
           }
         }
+      },
+      "Zimba.Maui/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.14"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        }
       }
     },
     "net9.0-android35.0/iossimulator-x64": {
@@ -4765,6 +4781,22 @@
             "related": ".aar;.pdb;.xml"
           }
         }
+      },
+      "Zimba.Maui/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.14"
+        },
+        "compile": {
+          "lib/net9.0-android35.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-android35.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        }
       }
     },
     "net9.0-ios18.0": {
@@ -5229,6 +5261,22 @@
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      },
+      "Zimba.Maui/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.14"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
         }
       }
     },
@@ -5695,6 +5743,22 @@
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
+      },
+      "Zimba.Maui/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.14"
+        },
+        "compile": {
+          "lib/net9.0-ios18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-ios18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        }
       }
     },
     "net9.0-maccatalyst18.0": {
@@ -6160,6 +6224,22 @@
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
+      },
+      "Zimba.Maui/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.14"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        }
       }
     },
     "net9.0-maccatalyst18.0/iossimulator-x64": {
@@ -6624,6 +6704,22 @@
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      },
+      "Zimba.Maui/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Maui.Controls": "9.0.14"
+        },
+        "compile": {
+          "lib/net9.0-maccatalyst18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0-maccatalyst18.0/Zimba.Maui.dll": {
+            "related": ".xml"
+          }
         }
       }
     }
@@ -9910,6 +10006,23 @@
         "xamarin.kotlinx.serialization.core.jvm.1.7.3.2.nupkg.sha512",
         "xamarin.kotlinx.serialization.core.jvm.nuspec"
       ]
+    },
+    "Zimba.Maui/1.0.0": {
+      "sha512": "863aO6zvDY+U73ztY0Q6jKhL527LfjL6iX3bWDWeX7E2MoZpvJ53iwCtpHeyquCVMZVUKfIP9+wvondwKlVvFw==",
+      "type": "package",
+      "path": "zimba.maui/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        "README.md",
+        "lib/net9.0-android35.0/Zimba.Maui.dll",
+        "lib/net9.0-android35.0/Zimba.Maui.xml",
+        "lib/net9.0-ios18.0/Zimba.Maui.dll",
+        "lib/net9.0-ios18.0/Zimba.Maui.xml",
+        "lib/net9.0-maccatalyst18.0/Zimba.Maui.dll",
+        "lib/net9.0-maccatalyst18.0/Zimba.Maui.xml",
+        "zimba.maui.1.0.0.nupkg.sha512",
+        "zimba.maui.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -9919,7 +10032,8 @@
       "DotNetMeteor.HotReload.Plugin >= 3.3.0",
       "Microsoft.Extensions.Logging.Debug >= 9.0.4",
       "Microsoft.Maui.Controls >= 9.0.60",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.1"
+      "Microsoft.NET.ILLink.Tasks >= 9.0.1",
+      "Zimba.Maui >= 1.0.0"
     ],
     "net9.0-ios18.0": [
       "CommunityToolkit.Maui >= 11.2.0",
@@ -9927,7 +10041,8 @@
       "DotNetMeteor.HotReload.Plugin >= 3.3.0",
       "Microsoft.Extensions.Logging.Debug >= 9.0.4",
       "Microsoft.Maui.Controls >= 9.0.60",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.1"
+      "Microsoft.NET.ILLink.Tasks >= 9.0.1",
+      "Zimba.Maui >= 1.0.0"
     ],
     "net9.0-maccatalyst18.0": [
       "CommunityToolkit.Maui >= 11.2.0",
@@ -9935,7 +10050,8 @@
       "DotNetMeteor.HotReload.Plugin >= 3.3.0",
       "Microsoft.Extensions.Logging.Debug >= 9.0.4",
       "Microsoft.Maui.Controls >= 9.0.60",
-      "Microsoft.NET.ILLink.Tasks >= 9.0.1"
+      "Microsoft.NET.ILLink.Tasks >= 9.0.1",
+      "Zimba.Maui >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -10018,6 +10134,10 @@
             "target": "Package",
             "version": "[9.0.1, )",
             "autoReferenced": true
+          },
+          "Zimba.Maui": {
+            "target": "Package",
+            "version": "[1.0.0, )"
           }
         },
         "imports": [
@@ -10069,6 +10189,10 @@
             "target": "Package",
             "version": "[9.0.1, )",
             "autoReferenced": true
+          },
+          "Zimba.Maui": {
+            "target": "Package",
+            "version": "[1.0.0, )"
           }
         },
         "imports": [
@@ -10120,6 +10244,10 @@
             "target": "Package",
             "version": "[9.0.1, )",
             "autoReferenced": true
+          },
+          "Zimba.Maui": {
+            "target": "Package",
+            "version": "[1.0.0, )"
           }
         },
         "imports": [

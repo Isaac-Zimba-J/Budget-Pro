@@ -11,6 +11,7 @@ public partial class AppShell : Shell
 		// Register the routes
 		Routing.RegisterRoute(nameof(AddBudgetPage), typeof(AddBudgetPage));
 		Routing.RegisterRoute(nameof(EditBudgetPage), typeof(EditBudgetPage));
+		Routing.RegisterRoute(nameof(AddItemPage), typeof(AddItemPage));
 	}
 
 	//

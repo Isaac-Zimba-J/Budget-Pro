@@ -16,11 +16,13 @@
                 <Label Text="Items"
                        VerticalOptions="Center"
                        Grid.Column="0" />
-                <Button Text="Add Item"
+                <Button x:Name="AddItemButton"
+                        Text="Add Item"
                         VerticalOptions="Center"
                         WidthRequest="90"
                         Grid.Column="1"
                         BackgroundColor="#210F37"
+                        Clicked="OnAddItemClicked"
                         TextColor="White" />
             </Grid>
             <VerticalStackLayout>
@@ -53,8 +55,10 @@
                                     FontSize="20"
                                     BackgroundColor="#F5F5F5"
                                     CornerRadius="30"
-                                    TextColor="Black" />
-                            <Label Text="2"
+                                    TextColor="Black"
+                                    Clicked="DecreaseValue" />
+                            <Label x:Name="StepperValue"
+                                   Text="2"
                                    FontAttributes="Bold"
                                    FontSize="22"
                                    VerticalOptions="Center"
@@ -66,7 +70,8 @@
                                     FontSize="20"
                                     BackgroundColor="#F5F5F5"
                                     CornerRadius="15"
-                                    TextColor="Black" />
+                                    TextColor="Black"
+                                    Clicked="IncreaseValue" />
                         </HorizontalStackLayout>
                         <!-- Delete Icon on the far right -->
                         <Button ImageSource="bin.png"

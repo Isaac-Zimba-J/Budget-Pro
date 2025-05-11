@@ -51,6 +51,7 @@
 /Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/Microsoft.Maui.dll
 /Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/Microsoft.Maui.Essentials.dll
 /Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/Microsoft.Maui.Graphics.dll
+/Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/Zimba.Maui.dll
 /Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/BudgetPro.dll
 /Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/Microsoft.CSharp.dll
 /Users/zimba/Documents/Workspace/Maui Projects/BudgetPro/BudgetPro/bin/Debug/net9.0-ios/iossimulator-x64/publish/../BudgetPro.app/Microsoft.VisualBasic.Core.dll

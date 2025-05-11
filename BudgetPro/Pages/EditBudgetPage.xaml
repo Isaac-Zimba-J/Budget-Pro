@@ -1,9 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BudgetPro.Pages.EditBudgetPage">
-    <ContentPage.Content>
-        
-    </ContentPage.Content>
+             x:Class="BudgetPro.Pages.EditBudgetPage"
+             Title="Edit Budget">
+    <ScrollView Padding="10">
+        <VerticalStackLayout Spacing="5">
+            <VerticalStackLayout Spacing="10"
+                                 Padding="10,0,10,20">
+                <Entry Placeholder="Budget Name" />
+                <Entry Placeholder="Amount"
+                       Keyboard="Numeric" />
+            </VerticalStackLayout>
+            <Grid ColumnDefinitions="*,Auto"
+                  Padding="0,0,0,0">
+                <Label Text="Items"
+                       VerticalOptions="Center"
+                       Grid.Column="0" />
+                <Button Text="Add Item"
+                        VerticalOptions="Center"
+                        WidthRequest="90"
+                        Grid.Column="1"
+                        BackgroundColor="#210F37"
+                        TextColor="White"
+                        Clicked="OnAddItemClicked" />
+            </Grid>
+            <VerticalStackLayout>
+                <Border StrokeThickness="0"
+                        StrokeShape="RoundRectangle 8"
+                        BackgroundColor="#F5F5F5"
+                        Padding="10"
+                        Margin="0,5">
+                    <Grid ColumnDefinitions="*,Auto,Auto"
+                          RowDefinitions="*,*">
+                        <!-- Item Name on the left -->
+                        <Label Text="Tomatoes"
+                               Grid.Column="0"
+                               Grid.Row="0"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               VerticalOptions="Center"
+                               HorizontalOptions="StartAndExpand" />
+                        <Label Text="K5,900.00"
+                               FontSize="14"
+                               HorizontalOptions="Start"
+                               Grid.Row="1" />
+                        <!-- Quantity Controls on the right -->
+                        <HorizontalStackLayout Spacing="5"
+                                               Grid.Column="1"
+                                               VerticalOptions="Center">
+                            <Button Text="−"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    FontSize="20"
+                                    BackgroundColor="#F5F5F5"
+                                    CornerRadius="30"
+                                    TextColor="Black"
+                                    Clicked="DecreaseValue" />
+                            <Label x:Name="StepperValue"
+                                   Text="2"
+                                   FontAttributes="Bold"
+                                   FontSize="22"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center" />
+                            <Button Text="+"
+                                    FontAttributes="Bold"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    FontSize="20"
+                                    BackgroundColor="#F5F5F5"
+                                    CornerRadius="15"
+                                    TextColor="Black"
+                                    Clicked="IncreaseValue" />
+                        </HorizontalStackLayout>
+                        <!-- Delete Icon on the far right -->
+                        <Button ImageSource="bin.png"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"
+                                VerticalOptions="End"
+                                Grid.Column="2"
+                                BackgroundColor="Transparent" />
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+            <Button Text="Save"
+                    Padding="10"
+                    Margin="0,50,0,10"
+                    BackgroundColor="#210F37" />
+            <Button Text="Delete"
+                    Padding="10"
+                    TextColor="#210F37"
+                    BorderColor="#210F37"
+                    BorderWidth="2"
+                    BackgroundColor="Transparent" />
+            <!-- <Label Text="Select Category" /> -->
+            <!-- <Picker Title="Select Category"
+                    SelectedIndexChanged="OnCategorySelected">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Food</x:String>
+                        <x:String>Transport</x:String>
+                        <x:String>Entertainment</x:String>
+                        <x:String>Utilities</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker> -->
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
