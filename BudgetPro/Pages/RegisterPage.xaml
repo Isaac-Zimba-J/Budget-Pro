@@ -1,9 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BudgetPro.Pages.RegisterPage">
-    <ContentPage.Content>
-        
-    </ContentPage.Content>
+             xmlns:mauiKit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="BudgetPro.Pages.RegisterPage"
+             Shell.FlyoutBehavior="Disabled"
+             Title="Register"
+             BackgroundColor="White">
+    <Grid>
+        <VerticalStackLayout Padding="30"
+                             Spacing="25"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Center"
+                             WidthRequest="320">
+            <!-- App Logo -->
+            <Image Source="logo.png"
+                   HeightRequest="100"
+                   WidthRequest="100"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10" />
+            <Label Text="Create New Account"
+                   FontSize="26"
+                   FontAttributes="Bold"
+                   TextColor="#210F37"
+                   HorizontalOptions="Center" />
+            <!-- Name Entry -->
+            <Entry WidthRequest="360"
+                   Placeholder="Full Name"
+                   Text="{Binding Username}"
+                   x:Name="nameEntry"
+                   BackgroundColor="Transparent"
+                   Margin="10,0" />
+            <!-- Email Entry -->
+            <Entry WidthRequest="360"
+                   Placeholder="Email"
+                   Text="{Binding Email}"
+                   x:Name="emailEntry"
+                   BackgroundColor="Transparent"
+                   Margin="10,0" />
+            <!-- Password Entry -->
+            <Entry WidthRequest="360"
+                   Placeholder="Password"
+                   IsPassword="True"
+                   Text="{Binding Password}"
+                   x:Name="passwordEntry"
+                   BackgroundColor="Transparent"
+                   Margin="10,0" />
+            <!-- Register Button -->
+            <Button Text="Register"
+                    BackgroundColor="#210F37"
+                    TextColor="White"
+                    FontSize="16"
+                    HeightRequest="50"
+                    WidthRequest="360"
+                    CornerRadius="12"
+                    Command="{Binding RegisterCommand}" />
+            <!-- Login Prompt -->
+            <Label Text="Already have an account? Login"
+                   FontSize="13"
+                   TextColor="#666"
+                   HorizontalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnLoginTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>

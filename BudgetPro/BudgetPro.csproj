@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
         <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+        <RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
         <!-- Note for MacCatalyst:
@@ -55,6 +56,7 @@
         <PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="DotNetMeteor.HotReload.Plugin" Version="3.3.0" />
+        <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
         <PackageReference Include="Google.Cloud.Firestore" Version="3.10.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />

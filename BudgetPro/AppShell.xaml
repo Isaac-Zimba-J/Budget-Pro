@@ -6,8 +6,10 @@
        xmlns:pages="clr-namespace:BudgetPro.Pages;assembly=BudgetPro"
        Shell.TabBarIsVisible="True"
        Title="BudgetPro">
-    <!-- <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}"
-                  Route="Login" /> -->
+    <ShellContent ContentTemplate="{DataTemplate pages:LoginPage}"
+                  Route="Login" />
+    <ShellContent ContentTemplate="{DataTemplate pages:RegisterPage}"
+                  Route="RegisterPage" />
     <TabBar>
         <ShellContent Title="Home"
                       Icon="home.png"

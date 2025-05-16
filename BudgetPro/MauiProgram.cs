@@ -4,6 +4,8 @@ using BudgetPro.Services.Contracts;
 using BudgetPro.ViewModels;
 using CommunityToolkit.Maui;
 using DotNet.Meteor.HotReload.Plugin;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
 using Microsoft.Extensions.Logging;
 using Zimba.Maui;
 
@@ -34,6 +36,13 @@ public static class MauiProgram
 
 		// Register the services
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
+		builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()
+		{
+			ApiKey = "AIzaSyDhbSGVvSknhNwUhgU0un80mKWlsZAqH5I",
+			AuthDomain = "budgetpro-33542.firebaseapp.com",
+			Providers = new FirebaseAuthProvider[]
+			{ new EmailProvider()}
+		}));
 
 		// Register the pages 
 		builder.Services.AddTransient<MainPage>();
