@@ -23,7 +23,16 @@ public class MainPageViewModel : BaseViewModel
 
     public async void NavigateToAddBudgetPage()
     {
-        await _navigationService.NavigateToAsync($"{nameof(AddBudgetPage)}");
+        try
+        {
+            // Using relative navigation (no /// prefix) to add the page to the navigation stack
+            await _navigationService.NavigateToAsync($"{nameof(AddBudgetPage)}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Navigation error: {ex.Message}");
+            await Shell.Current.DisplayAlert("Navigation Error", ex.Message, "OK");
+        }
     }
 
 
