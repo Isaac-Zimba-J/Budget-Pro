@@ -7,22 +7,22 @@
              Title="Login"
              BackgroundColor="White">
     <Grid>
+        <!-- App Logo -->
+        <Image Source="logo.png"
+               HeightRequest="100"
+               WidthRequest="100"
+               HorizontalOptions="Center"
+               Margin="0,0,0,10" />
+        <Label Text="Welcome to BudgetPro"
+               FontSize="26"
+               FontAttributes="Bold"
+               TextColor="#210F37"
+               HorizontalOptions="Center" />
         <VerticalStackLayout Padding="30"
                              Spacing="25"
                              HorizontalOptions="Center"
                              VerticalOptions="Center"
                              WidthRequest="320">
-            <!-- App Logo -->
-            <Image Source="logo.png"
-                   HeightRequest="100"
-                   WidthRequest="100"
-                   HorizontalOptions="Center"
-                   Margin="0,0,0,10" />
-            <Label Text="Welcome to BudgetPro"
-                   FontSize="26"
-                   FontAttributes="Bold"
-                   TextColor="#210F37"
-                   HorizontalOptions="Center" />
             <!-- Email Entry -->
             <Entry WidthRequest="360"
                    Placeholder="Email"
