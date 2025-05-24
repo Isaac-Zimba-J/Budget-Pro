@@ -81,3 +81,5 @@ Migrations/
 
 # Custom entry for your project
 BudgetPro/Resources/Raw/credentials/google-services.json
+BudgetPro/Resources/Raw/credentials/firebase-service-account.json
+BudgetPro/Resources/Raw/credentials/
