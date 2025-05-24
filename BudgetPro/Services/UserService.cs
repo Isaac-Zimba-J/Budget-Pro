@@ -9,10 +9,17 @@ public class UserService : IUserService
     private readonly FirebaseAuthClient _firebaseAuthClient;
     public string? CurrentUserId => _firebaseAuthClient?.User?.Uid;
 
-    public Models.User? CurrentUser => throw new NotImplementedException();
+    public Models.User? CurrentUser => _firebaseAuthClient?.User != null
+        ? new Models.User
+        {
+            Id = _firebaseAuthClient.User.Uid,
+            Email = _firebaseAuthClient.User.Info.Email ?? string.Empty
+        }
+        : null;
 
-    public bool IsAuthenticated => throw new NotImplementedException();
 
+    // Implement the IsAuthenticated property to check if user is logged in
+    public bool IsAuthenticated => _firebaseAuthClient?.User != null;
 
     public UserService(FirebaseAuthClient firebaseAuthClient)
     {
