@@ -1,28 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using Google.Cloud.Firestore;
 
 namespace BudgetPro.Models;
 
+[FirestoreData]
 public class User : BaseModel
 {
-
-    [Required]
-    [StringLength(100)]
-    [EmailAddress]
+    [FirestoreProperty]
     public string Email { get; set; }
-
-    [StringLength(255)]
-    public string AvatarUrl { get; set; }
-
-    [StringLength(100)]
-    public string FirstName { get; set; }
-
-    [StringLength(100)]
-    public string LastName { get; set; }
-
-    public DateTime? LastLoginAt { get; set; }
-
-    // Navigation properties
-    public virtual ICollection<Budget> Budgets { get; set; } = new List<Budget>();
-        
-    public virtual ICollection<ChatMessage> SentMessages { get; set; } = new List<ChatMessage>();
+    [FirestoreProperty]
+    public List<string> BudgetIds { get; set; } = new List<string>(); // References to budgets
 }

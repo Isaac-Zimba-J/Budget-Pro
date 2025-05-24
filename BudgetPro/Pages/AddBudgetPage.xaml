@@ -1,105 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:BudgetPro.ViewModels"
+             x:DataType="viewModel:AddBudgetViewModel"
              x:Class="BudgetPro.Pages.AddBudgetPage"
              Title="Add Budget">
-    <ScrollView Padding="10">
-        <VerticalStackLayout Spacing="5">
-            <VerticalStackLayout Spacing="10"
-                                 Padding="10,0,10,20">
-                <Entry Placeholder="Budget Name" />
-                <Entry Placeholder="Amount"
-                       Keyboard="Numeric" />
-            </VerticalStackLayout>
-            <Grid ColumnDefinitions="*,Auto"
-                  Padding="0,0,0,0">
-                <Label Text="Items"
-                       VerticalOptions="Center"
-                       Grid.Column="0" />
-                <Button x:Name="AddItemButton"
-                        Text="Add Item"
-                        VerticalOptions="Center"
-                        WidthRequest="90"
-                        Grid.Column="1"
-                        BackgroundColor="#210F37"
-                        Clicked="OnAddItemClicked"
-                        TextColor="White" />
-            </Grid>
-            <VerticalStackLayout>
-                <Border StrokeThickness="0"
-                        StrokeShape="RoundRectangle 8"
-                        BackgroundColor="#F5F5F5"
-                        Padding="10"
-                        Margin="0,5">
-                    <Grid ColumnDefinitions="*,Auto,Auto"
-                          RowDefinitions="*,*">
-                        <!-- Item Name on the left -->
-                        <Label Text="Tomatoes"
-                               Grid.Column="0"
-                               Grid.Row="0"
-                               FontAttributes="Bold"
-                               FontSize="16"
+    <ScrollView Padding="20">
+        <VerticalStackLayout Spacing="15">
+            <!-- Budget Name -->
+            <Label Text="Budget Name"
+                   FontAttributes="Bold"
+                   FontSize="16" />
+            <Entry Text="{Binding BudgetName}"
+                   Placeholder="Enter budget name"
+                   Margin="0,0,0,10" />
+            <!-- Budget Amount -->
+            <Label Text="Budget Amount"
+                   FontAttributes="Bold"
+                   FontSize="16" />
+            <Entry Text="{Binding BudgetAmount}"
+                   Keyboard="Numeric"
+                   Placeholder="Enter amount"
+                   Margin="0,0,0,10" />
+            <StackLayout Orientation="Horizontal"
+                         Margin="0,0,0,10">
+                <Label Text="Adjust Amount:"
+                       VerticalOptions="Center" />
+                <Stepper Value="{Binding BudgetAmount}"
+                         Minimum="0"
+                         Maximum="10000"
+                         Increment="100"
+                         HorizontalOptions="EndAndExpand" />
+            </StackLayout>
+            <!-- Budget Description -->
+            <Label Text="Description (Optional)"
+                   FontAttributes="Bold"
+                   FontSize="16" />
+            <Editor Text="{Binding BudgetDescription}"
+                    Placeholder="Enter description"
+                    HeightRequest="100"
+                    Margin="0,0,0,10" />
+            <!-- Budget Date Range -->
+            <Label Text="Start Date"
+                   FontAttributes="Bold"
+                   FontSize="16" />
+            <DatePicker Date="{Binding BudgetStartDate}"
+                        Format="D"
+                        Margin="0,0,0,10" />
+            <Label Text="End Date"
+                   FontAttributes="Bold"
+                   FontSize="16" />
+            <DatePicker Date="{Binding BudgetEndDate}"
+                        Format="D"
+                        Margin="0,0,0,10" />
+            <!-- Save Button -->
+            <Button Text="Save Budget"
+                    Command="{Binding SaveBudgetCommand}"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Padding="20,10"
+                    Margin="0,30,0,0"
+                    BackgroundColor="#210F37"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="10" />
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               HorizontalOptions="Center"
                                VerticalOptions="Center"
-                               HorizontalOptions="StartAndExpand" />
-                        <Label Text="K5,900.00"
-                               FontSize="14"
-                               HorizontalOptions="Start"
-                               Grid.Row="1" />
-                        <!-- Quantity Controls on the right -->
-                        <HorizontalStackLayout Spacing="5"
-                                               Grid.Column="1"
-                                               VerticalOptions="Center">
-                            <Button Text="−"
-                                    WidthRequest="30"
-                                    HeightRequest="30"
-                                    FontSize="20"
-                                    BackgroundColor="#F5F5F5"
-                                    CornerRadius="30"
-                                    TextColor="Black"
-                                    Clicked="DecreaseValue" />
-                            <Label x:Name="StepperValue"
-                                   Text="2"
-                                   FontAttributes="Bold"
-                                   FontSize="22"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Center" />
-                            <Button Text="+"
-                                    FontAttributes="Bold"
-                                    WidthRequest="30"
-                                    HeightRequest="30"
-                                    FontSize="20"
-                                    BackgroundColor="#F5F5F5"
-                                    CornerRadius="15"
-                                    TextColor="Black"
-                                    Clicked="IncreaseValue" />
-                        </HorizontalStackLayout>
-                        <!-- Delete Icon on the far right -->
-                        <Button ImageSource="bin.png"
-                                WidthRequest="40"
-                                HeightRequest="40"
-                                CornerRadius="20"
-                                VerticalOptions="End"
-                                Grid.Column="2"
-                                BackgroundColor="Transparent" />
-                    </Grid>
-                </Border>
-            </VerticalStackLayout>
-            <Button Text="Save"
-                    Padding="10"
-                    Margin="0,50"
-                    BackgroundColor="#210F37" />
-            <!-- <Label Text="Select Category" /> -->
-            <!-- <Picker Title="Select Category"
-                    SelectedIndexChanged="OnCategorySelected">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Food</x:String>
-                        <x:String>Transport</x:String>
-                        <x:String>Entertainment</x:String>
-                        <x:String>Utilities</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker> -->
+                               Color="#210F37"
+                               Margin="0,20,0,0" />
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   TextColor="Red"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   Margin="0,10,0,0" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

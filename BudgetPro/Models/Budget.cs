@@ -1,31 +1,21 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Google.Cloud.Firestore;
 
 namespace BudgetPro.Models;
 
-public class Budget :BaseModel
+[FirestoreData]
+public class Budget : BaseModel
 {
 
+    [FirestoreProperty]
     public string Description { get; set; }
+    [FirestoreProperty]
 
-    [Required]
-    public decimal TotalAmount { get; set; }
+    public double TotalAmount { get; set; }
+    [FirestoreProperty]
 
-    [Required]
-    public Guid UserId { get; set; }
-        
-    public User User { get; set; }
-    
-
-    // Navigation property
-    public virtual ICollection<BudgetItem> Items { get; set; } = new List<BudgetItem>();
-
-    [NotMapped]
-    public decimal SpentAmount => Items.Sum(i => i.Amount);
-
-    [NotMapped]
-    public decimal RemainingAmount => TotalAmount - SpentAmount;
-
-    [NotMapped]
-    public decimal SpentPercentage => TotalAmount > 0 ? Math.Round((SpentAmount / TotalAmount) * 100, 2) : 0;
+    public string UserId { get; set; } // Reference to a user
+    [FirestoreProperty]
+    public List<BudgetItem> BudgetItems { get; set; } = new List<BudgetItem>(); // References to budget items
 }

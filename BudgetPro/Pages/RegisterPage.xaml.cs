@@ -4,9 +4,10 @@ namespace BudgetPro.Pages;
 
 public partial class RegisterPage : ContentPage
 {
-    public RegisterPage()
+    public RegisterPage(ViewModels.RegisterViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     private void OnRegisterClicked(object sender, EventArgs e)
@@ -14,8 +15,9 @@ public partial class RegisterPage : ContentPage
         // Registration logic will go here
     }
 
-    private void OnLoginTapped(object sender, EventArgs e)
+    private async void OnLoginTapped(object sender, EventArgs e)
     {
-        // Navigation logic will go here
+        // Navigate back to the login page
+        await Shell.Current.GoToAsync("///LoginPage");
     }
 }

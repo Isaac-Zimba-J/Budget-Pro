@@ -13,15 +13,16 @@ public partial class RegisterViewModel : BaseViewModel
 
     // properties
     [ObservableProperty]
-    private string _email;
+    private string _email = string.Empty;
 
     [ObservableProperty]
-    private string _password;
-    [ObservableProperty]
-    private string _username;
+    private string _password = string.Empty;
 
     [ObservableProperty]
-    private string _errorMessage;
+    private string _username = string.Empty;
+
+    [ObservableProperty]
+    private string _errorMessage = string.Empty;
 
 
     // constructor
@@ -46,20 +47,60 @@ public partial class RegisterViewModel : BaseViewModel
     [RelayCommand]
     public async Task Register()
     {
+        if (string.IsNullOrWhiteSpace(Username))
+        {
+            ErrorMessage = "Please enter your full name";
+            await Shell.Current.DisplayAlert("Validation Error", "Please enter your full name", "OK");
+            return;
+        }
 
+        if (string.IsNullOrWhiteSpace(Email))
+        {
+            ErrorMessage = "Please enter your email";
+            await Shell.Current.DisplayAlert("Validation Error", "Please enter your email", "OK");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Password))
+        {
+            ErrorMessage = "Please enter a password";
+            await Shell.Current.DisplayAlert("Validation Error", "Please enter a password", "OK");
+            return;
+        }
+
+        IsBusy = true;
+        ErrorMessage = "Creating your account...";
 
         try
         {
+            // Small delay to show loading indicator (can be removed in production)
+            await Task.Delay(500);
+
+            ErrorMessage = "Registering with server...";
+            Console.WriteLine($"Attempting to register user: {Email}");
+
             var auth = await _firebaseAuthClient.CreateUserWithEmailAndPasswordAsync(Email, Password, Username);
             if (auth != null)
             {
-                // Navigate to the main page after successful login
-                await _navigationService.NavigateToAsync($"{nameof(MainPage)}");
+                ErrorMessage = "Registration successful! Redirecting...";
+                Console.WriteLine("Registration successful, navigating to MainPage");
+
+                // Small delay so user can see the success message
+                await Task.Delay(500);
+
+                // Navigate to the main page after successful registration - using absolute navigation
+                await Shell.Current.GoToAsync("//MainPage");
             }
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            Console.WriteLine($"Registration Error: {ex.Message}");
+            ErrorMessage = $"Registration Failed: {ex.Message}";
+            await Shell.Current.DisplayAlert("Registration Error", ex.Message, "OK");
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 

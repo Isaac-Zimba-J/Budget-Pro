@@ -1,18 +1,21 @@
 using System.ComponentModel.DataAnnotations;
+using Google.Cloud.Firestore;
 
 namespace BudgetPro.Models;
 
-public class ChatMessage :BaseModel
+[FirestoreData]
+public class ChatMessage : BaseModel
 {
-    [Required]
-    [StringLength(1000)]
+
+    [FirestoreProperty]
+
     public string Text { get; set; }
+    [FirestoreProperty]
 
-    // Foreign key
-    [Required]
-    public Guid UserId { get; set; }
+    public string UserId { get; set; }
 
-    // Navigation property
-    public User User { get; set; }
-    
+    //optional attachment
+    [FirestoreProperty]
+    public string AttachmentUrl { get; set; }
+
 }

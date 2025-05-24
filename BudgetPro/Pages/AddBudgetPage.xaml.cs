@@ -10,11 +10,23 @@ namespace BudgetPro.Pages;
 
 public partial class AddBudgetPage : ContentPage
 {
-    private int value = 1;
+    // Reference to the view model for direct access if needed
+    private readonly AddBudgetViewModel _viewModel;
+
     public AddBudgetPage(AddBudgetViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+
+        // Store the view model and set as binding context
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
+    }
+
+    // If you need to handle any page lifecycle events or UI events not handled by the ViewModel
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        // Any additional setup when page appears
     }
 
     private void OnAddItemClicked(object sender, EventArgs e)
@@ -22,20 +34,4 @@ public partial class AddBudgetPage : ContentPage
         var popup = new AddItemPage();
         this.ShowPopup(popup);
     }
-
-
-    private void DecreaseValue(object sender, EventArgs e)
-    {
-        value--;
-        if (value < 1) value = 1; // Set minimum value to 1
-        StepperValue.Text = value.ToString();
-    }
-
-    private void IncreaseValue(object sender, EventArgs e)
-    {
-        value++;
-        StepperValue.Text = value.ToString();
-    }
-
-
 }

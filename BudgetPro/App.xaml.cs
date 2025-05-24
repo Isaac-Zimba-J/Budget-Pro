@@ -1,14 +1,32 @@
-﻿namespace BudgetPro;
+﻿using BudgetPro.Services.Contracts;
+using Microsoft.Maui.Controls;
+
+namespace BudgetPro;
 
 public partial class App : Application
 {
-	public App()
+	private readonly IUserService _userService;
+
+	public App(IUserService userService)
 	{
 		InitializeComponent();
+
+		_userService = userService;
+
+		MainPage = new AppShell();
 	}
 
-	protected override Window CreateWindow(IActivationState? activationState)
+	protected override async void OnStart()
 	{
-		return new Window(new AppShell());
+		base.OnStart();
+
+		// Try to load saved user credentials on app start
+		bool isLoggedIn = await _userService.LoadSavedUserAsync();
+
+		// Navigate to MainPage if already logged in
+		if (isLoggedIn)
+		{
+			await Shell.Current.GoToAsync("//MainPage");
+		}
 	}
 }
