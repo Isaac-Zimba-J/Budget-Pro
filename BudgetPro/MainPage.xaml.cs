@@ -11,12 +11,14 @@ public partial class MainPage : ContentPage
 		InitializeComponent();
 		_viewModel = viewModel;
 		BindingContext = viewModel;
+		Console.WriteLine("MainPage: Constructor called, BindingContext set");
 	}
 
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await _viewModel.OnAppearingAsync();
+		Console.WriteLine("MainPage: OnAppearing called");
+		await _viewModel.LoadBudgetsAsync();
 	}
 }
 

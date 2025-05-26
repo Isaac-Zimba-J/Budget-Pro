@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows.Input;
 using BudgetPro.Pages;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace BudgetPro.ViewModels
 {
@@ -81,8 +82,11 @@ namespace BudgetPro.ViewModels
         [RelayCommand]
         public async Task LoadBudgetsAsync()
         {
+            Console.WriteLine("=== Starting LoadBudgetsAsync ===");
+
             if (!_userService.IsAuthenticated)
             {
+                Console.WriteLine("User is not authenticated");
                 ErrorMessage = "Please login to view your budgets";
                 HasData = false;
                 return;
@@ -96,9 +100,11 @@ namespace BudgetPro.ViewModels
 
                 // Get the user ID for filtering budgets
                 string userId = _userService.CurrentUserId;
+                Console.WriteLine($"Current User ID: {userId}");
 
                 if (string.IsNullOrEmpty(userId))
                 {
+                    Console.WriteLine("User ID is null or empty");
                     ErrorMessage = "User ID not found";
                     HasData = false;
                     return;
@@ -109,32 +115,67 @@ namespace BudgetPro.ViewModels
 
                 try
                 {
+                    Console.WriteLine("Attempting to fetch budgets from Firestore...");
+
                     // First attempt - standard Firestore approach
                     var allBudgets = await _firestoreService.GetAllAsync<Budget>("budgets");
-                    userBudgets = allBudgets
-                        .Where(b => b.UserId == userId && !b.IsDeleted)
-                        .OrderByDescending(b => b.Created)
-                        .ToList();
-                }
-                catch (Exception ex) when (ex.Message.Contains("HTTP/2") || ex.Message.Contains("connection"))
-                {
-                    // Fallback - try HTTP/1.1 approach or cached data
-                    Console.WriteLine($"HTTP/2 connection error, trying fallback approach: {ex.Message}");
+                    Console.WriteLine($"Total budgets fetched from Firestore: {allBudgets?.Count ?? 0}");
 
-                    // Try to load from cache first
-                    userBudgets = await LoadBudgetsFromCache(userId);
-
-                    if (!userBudgets.Any())
+                    if (allBudgets != null && allBudgets.Any())
                     {
-                        // Show temporary offline message but don't return yet
-                        ErrorMessage = "Unable to connect to the server. Showing cached data if available.";
+                        userBudgets = allBudgets
+                            .Where(b => b.UserId == userId && !b.IsDeleted)
+                            .OrderByDescending(b => b.Created)
+                            .ToList();
+
+                        Console.WriteLine($"Filtered budgets for user {userId}: {userBudgets.Count}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No budgets returned from Firestore");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error fetching from Firestore: {ex}");
+
+                    if (ex.Message.Contains("HTTP/2") || ex.Message.Contains("connection") || ex.Message.Contains("gRPC"))
+                    {
+                        // Fallback - use direct REST API call (same pattern as AddBudgetViewModel)
+                        Console.WriteLine($"HTTP/2/gRPC connection error, trying REST API fallback: {ex.Message}");
+
+                        try
+                        {
+                            userBudgets = await LoadBudgetsDirectly(userId);
+                            Console.WriteLine($"Loaded {userBudgets.Count} budgets via REST API fallback");
+                        }
+                        catch (Exception restEx)
+                        {
+                            Console.WriteLine($"REST API fallback also failed: {restEx.Message}");
+
+                            // Try to load from cache as last resort
+                            userBudgets = await LoadBudgetsFromCache(userId);
+                            Console.WriteLine($"Loaded {userBudgets.Count} budgets from cache");
+
+                            if (!userBudgets.Any())
+                            {
+                                ErrorMessage = "Unable to connect to the server. Please check your connection.";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw; // Re-throw if it's not a connection error
                     }
                 }
 
                 // Update the UI with whatever data we have
+                Console.WriteLine($"Updating UI with {userBudgets.Count} budgets");
+
                 Budgets.Clear();
                 foreach (var budget in userBudgets)
                 {
+                    Console.WriteLine($"Adding budget to UI: {budget.Name}");
                     Budgets.Add(budget);
                 }
 
@@ -143,21 +184,29 @@ namespace BudgetPro.ViewModels
                 TotalSpent = userBudgets.Sum(b => CalculateSpent(b));
 
                 HasData = Budgets.Any();
+                Console.WriteLine($"HasData: {HasData}, Budgets.Count: {Budgets.Count}");
 
                 if (!HasData)
                 {
                     ErrorMessage = "No budgets found. Add your first budget!";
+                    Console.WriteLine("Setting error message: No budgets found");
+                }
+                else
+                {
+                    ErrorMessage = string.Empty;
+                    Console.WriteLine("Budgets loaded successfully, clearing error message");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading budgets: {ex}");
+                Console.WriteLine($"General error loading budgets: {ex}");
                 ErrorMessage = $"Error loading budgets: {ex.Message}";
             }
             finally
             {
                 IsBusy = false;
                 IsRefreshing = false;
+                Console.WriteLine("=== Finished LoadBudgetsAsync ===");
             }
         }
 
@@ -252,6 +301,136 @@ namespace BudgetPro.ViewModels
             {
                 Console.WriteLine($"Error saving to cache: {ex.Message}");
             }
+        }
+
+        // Add this new method to MainPageViewModel (same pattern as AddBudgetViewModel)
+        private async Task<List<Budget>> LoadBudgetsDirectly(string userId)
+        {
+            try
+            {
+                Console.WriteLine("Loading budgets directly via REST API...");
+
+                // Create HTTP client with HTTP/1.1 (same as AddBudgetViewModel)
+                using var httpClient = new HttpClient(new HttpClientHandler
+                {
+                    SslProtocols = System.Security.Authentication.SslProtocols.Tls12
+                });
+                httpClient.DefaultRequestVersion = new Version(1, 1);
+
+                string projectId = "budgetpro-33542";
+                string authToken = await _userService.GetAuthToken();
+
+                if (string.IsNullOrEmpty(authToken))
+                {
+                    throw new UnauthorizedAccessException("No auth token available");
+                }
+
+                var url = $"https://firestore.googleapis.com/v1/projects/{projectId}/databases/(default)/documents/budgets";
+
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.Add("Authorization", $"Bearer {authToken}");
+
+                var response = await httpClient.SendAsync(request);
+                var content = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine($"REST API Response: {response.StatusCode}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Firestore REST API error: {response.StatusCode} - {content}");
+                }
+
+                // Parse the Firestore REST API response
+                var firestoreResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<FirestoreListResponse>(content);
+                var budgets = new List<Budget>();
+
+                if (firestoreResponse?.Documents != null)
+                {
+                    foreach (var doc in firestoreResponse.Documents)
+                    {
+                        try
+                        {
+                            var budget = ConvertFirestoreDocumentToBudget(doc);
+                            if (budget != null && budget.UserId == userId && !budget.IsDeleted)
+                            {
+                                budgets.Add(budget);
+                                Console.WriteLine($"Converted budget: {budget.Name} for user {budget.UserId}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error converting document: {ex.Message}");
+                        }
+                    }
+                }
+
+                Console.WriteLine($"REST API: Returning {budgets.Count} filtered budgets");
+                return budgets.OrderByDescending(b => b.Created).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"REST API Error: {ex}");
+                throw;
+            }
+        }
+
+        // Add this helper method to convert Firestore document to Budget object
+        private Budget ConvertFirestoreDocumentToBudget(FirestoreDocument doc)
+        {
+            if (doc?.Fields == null)
+                return null;
+
+            var budget = new Budget();
+
+            // Extract each field safely
+            if (doc.Fields.TryGetValue("Id", out var idField) && idField.StringValue != null)
+                budget.Id = idField.StringValue;
+
+            if (doc.Fields.TryGetValue("Name", out var nameField) && nameField.StringValue != null)
+                budget.Name = nameField.StringValue;
+
+            if (doc.Fields.TryGetValue("Description", out var descField) && descField.StringValue != null)
+                budget.Description = descField.StringValue;
+
+            if (doc.Fields.TryGetValue("TotalAmount", out var amountField) && amountField.DoubleValue.HasValue)
+                budget.TotalAmount = amountField.DoubleValue.Value;
+
+            if (doc.Fields.TryGetValue("UserId", out var userIdField) && userIdField.StringValue != null)
+                budget.UserId = userIdField.StringValue;
+
+            if (doc.Fields.TryGetValue("Created", out var createdField) && createdField.TimestampValue != null)
+                budget.Created = DateTime.Parse(createdField.TimestampValue).ToUniversalTime();
+
+            if (doc.Fields.TryGetValue("Updated", out var updatedField) && updatedField.TimestampValue != null)
+                budget.Updated = DateTime.Parse(updatedField.TimestampValue).ToUniversalTime();
+
+            if (doc.Fields.TryGetValue("IsDeleted", out var deletedField) && deletedField.BooleanValue.HasValue)
+                budget.IsDeleted = deletedField.BooleanValue.Value;
+
+            // Initialize empty BudgetItems list
+            budget.BudgetItems = new List<BudgetItem>();
+
+            return budget;
+        }
+
+        // Add these helper classes to support the REST API response (same as AddBudgetViewModel pattern)
+        public class FirestoreListResponse
+        {
+            public List<FirestoreDocument> Documents { get; set; }
+        }
+
+        public class FirestoreDocument
+        {
+            public Dictionary<string, FirestoreValue> Fields { get; set; }
+        }
+
+        public class FirestoreValue
+        {
+            public string StringValue { get; set; }
+            public string IntegerValue { get; set; }
+            public double? DoubleValue { get; set; }
+            public bool? BooleanValue { get; set; }
+            public string TimestampValue { get; set; }
         }
     }
 }

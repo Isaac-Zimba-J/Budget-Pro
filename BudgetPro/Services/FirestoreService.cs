@@ -59,44 +59,45 @@ namespace BudgetPro.Services
 
         public async Task<List<T>> GetAllAsync<T>(string collectionPath)
         {
-            for (int attempt = 1; attempt <= MaxRetries; attempt++)
+            Console.WriteLine($"FirestoreService: Getting all documents from collection '{collectionPath}'");
+
+            try
             {
-                try
-                {
-                    CollectionReference collectionRef = _firestoreDB.Collection(collectionPath);
-                    QuerySnapshot querySnapshot = await collectionRef.GetSnapshotAsync();
+                CollectionReference collectionRef = _firestoreDB.Collection(collectionPath);
+                QuerySnapshot querySnapshot = await collectionRef.GetSnapshotAsync();
 
-                    List<T> items = new List<T>();
-                    foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+                Console.WriteLine($"FirestoreService: Query returned {querySnapshot.Documents.Count} documents");
+
+                List<T> items = new List<T>();
+                foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+                {
+                    if (documentSnapshot.Exists)
                     {
-                        if (documentSnapshot.Exists)
+                        try
                         {
-                            items.Add(documentSnapshot.ConvertTo<T>());
+                            var item = documentSnapshot.ConvertTo<T>();
+                            items.Add(item);
+                            Console.WriteLine($"FirestoreService: Successfully converted document {documentSnapshot.Id}");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"FirestoreService: Error converting document {documentSnapshot.Id}: {ex}");
                         }
                     }
-
-                    return items;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
-
-                    if (attempt == MaxRetries ||
-                        (ex.Message.Contains("HTTP/2") && attempt > 1))
+                    else
                     {
-                        // If this is an HTTP/2 error after first attempt, try REST API approach
-                        if (ex.Message.Contains("HTTP/2"))
-                        {
-                            return await GetAllViaRestAsync<T>(collectionPath);
-                        }
-                        throw;
+                        Console.WriteLine($"FirestoreService: Document {documentSnapshot.Id} does not exist");
                     }
-
-                    await Task.Delay(1000 * attempt); // Exponential backoff
                 }
+
+                Console.WriteLine($"FirestoreService: Returning {items.Count} items");
+                return items;
             }
-
-            throw new Exception("Failed after maximum retry attempts");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FirestoreService: Error in GetAllAsync: {ex}");
+                throw;
+            }
         }
 
         private async Task<List<T>> GetAllViaRestAsync<T>(string collectionPath)

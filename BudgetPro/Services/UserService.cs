@@ -7,7 +7,16 @@ namespace BudgetPro.Services;
 public class UserService : IUserService
 {
     private readonly FirebaseAuthClient _firebaseAuthClient;
-    public string? CurrentUserId => _firebaseAuthClient?.User?.Uid;
+
+    public string? CurrentUserId
+    {
+        get
+        {
+            var userId = _firebaseAuthClient?.User?.Uid;
+            Console.WriteLine($"UserService: CurrentUserId = {userId}");
+            return userId;
+        }
+    }
 
     public Models.User? CurrentUser => _firebaseAuthClient?.User != null
         ? new Models.User
@@ -19,7 +28,15 @@ public class UserService : IUserService
 
 
     // Implement the IsAuthenticated property to check if user is logged in
-    public bool IsAuthenticated => _firebaseAuthClient?.User != null;
+    public bool IsAuthenticated
+    {
+        get
+        {
+            var isAuth = _firebaseAuthClient?.User != null;
+            Console.WriteLine($"UserService: IsAuthenticated = {isAuth}");
+            return isAuth;
+        }
+    }
 
     public UserService(FirebaseAuthClient firebaseAuthClient)
     {
