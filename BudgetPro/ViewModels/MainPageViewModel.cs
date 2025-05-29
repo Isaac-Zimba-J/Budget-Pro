@@ -45,7 +45,7 @@ namespace BudgetPro.ViewModels
             _navigationService = navigationService;
             _firestoreService = firestoreService;
             _userService = userService;
-            Title = "Budget Dashboard";
+            Title = "Budget Dashboard ";
 
             // Initial state
             HasData = false;
