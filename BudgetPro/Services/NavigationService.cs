@@ -23,13 +23,13 @@ public class NavigationService : INavigationService
 
         try
         {
-            if (parameters == null)
+            if (parameters != null && parameters.Any())
             {
-                await Shell.Current.GoToAsync(route);
+                await Shell.Current.GoToAsync(route, parameters);
             }
             else
             {
-                await Shell.Current.GoToAsync(route, parameters);
+                await Shell.Current.GoToAsync(route);
             }
         }
         catch (Exception ex)

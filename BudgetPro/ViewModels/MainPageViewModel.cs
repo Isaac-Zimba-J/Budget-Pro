@@ -54,7 +54,6 @@ namespace BudgetPro.ViewModels
 
         // Command to navigate to the AddBudgetPage
         public Command AddBudgetCommand => new Command(NavigateToAddBudgetPage);
-        public Command EditBudgetCommand => new Command(NavigateToEditBudgetPage);
 
         // Method to navigate to the AddBudgetPage
         // This method is called when the AddBudgetCommand is executed
@@ -74,9 +73,28 @@ namespace BudgetPro.ViewModels
         }
 
 
-        public async void NavigateToEditBudgetPage()
+        [RelayCommand]
+        public async Task EditBudget(Budget budget)
         {
-            await _navigationService.NavigateToAsync($"{nameof(EditBudgetPage)}");
+            if (budget == null) return;
+
+            try
+            {
+                Console.WriteLine($"Navigating to edit budget: {budget.Name}");
+
+                // Pass the budget data as navigation parameters
+                var parameters = new Dictionary<string, object>
+                {
+                    ["Budget"] = budget
+                };
+
+                await _navigationService.NavigateToAsync("EditBudgetPage", parameters);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error navigating to edit budget: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", "Failed to open budget for editing", "OK");
+            }
         }
 
         [RelayCommand]

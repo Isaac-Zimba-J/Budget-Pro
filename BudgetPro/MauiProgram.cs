@@ -53,6 +53,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<AddBudgetPage>();
 		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegisterPage>();
+		builder.Services.AddTransient<EditBudgetPage>();
 
 		// Register view models
 		builder.Services.AddTransient<MainPageViewModel>();
@@ -60,6 +61,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<AddBudgetViewModel>();
 		builder.Services.AddTransient<LoginViewModel>();
 		builder.Services.AddTransient<RegisterViewModel>();
+		builder.Services.AddTransient<EditBudgetViewModel>();
 
 		return builder.Build();
 	}

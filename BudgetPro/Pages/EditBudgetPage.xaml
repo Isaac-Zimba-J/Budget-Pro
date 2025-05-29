@@ -1,110 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:BudgetPro.ViewModels"
              x:Class="BudgetPro.Pages.EditBudgetPage"
-             Title="Edit Budget">
-    <ScrollView Padding="10">
-        <VerticalStackLayout Spacing="5">
-            <VerticalStackLayout Spacing="10"
-                                 Padding="10,0,10,20">
-                <Entry Placeholder="Budget Name" />
-                <Entry Placeholder="Amount"
-                       Keyboard="Numeric" />
-            </VerticalStackLayout>
-            <Grid ColumnDefinitions="*,Auto"
-                  Padding="0,0,0,0">
-                <Label Text="Items"
-                       VerticalOptions="Center"
-                       Grid.Column="0" />
-                <Button Text="Add Item"
-                        VerticalOptions="Center"
-                        WidthRequest="90"
-                        Grid.Column="1"
-                        BackgroundColor="#210F37"
-                        TextColor="White"
-                        Clicked="OnAddItemClicked" />
-            </Grid>
-            <VerticalStackLayout>
-                <Border StrokeThickness="0"
-                        StrokeShape="RoundRectangle 8"
-                        BackgroundColor="#F5F5F5"
-                        Padding="10"
-                        Margin="0,5">
-                    <Grid ColumnDefinitions="*,Auto,Auto"
-                          RowDefinitions="*,*">
-                        <!-- Item Name on the left -->
-                        <Label Text="Tomatoes"
-                               Grid.Column="0"
-                               Grid.Row="0"
-                               FontAttributes="Bold"
-                               FontSize="16"
-                               VerticalOptions="Center"
-                               HorizontalOptions="StartAndExpand" />
-                        <Label Text="K5,900.00"
-                               FontSize="14"
-                               HorizontalOptions="Start"
-                               Grid.Row="1" />
-                        <!-- Quantity Controls on the right -->
-                        <HorizontalStackLayout Spacing="5"
-                                               Grid.Column="1"
-                                               VerticalOptions="Center">
-                            <Button Text="−"
-                                    WidthRequest="30"
-                                    HeightRequest="30"
-                                    FontSize="20"
-                                    BackgroundColor="#F5F5F5"
-                                    CornerRadius="30"
-                                    TextColor="Black"
-                                    Clicked="DecreaseValue" />
-                            <Label x:Name="StepperValue"
-                                   Text="2"
-                                   FontAttributes="Bold"
-                                   FontSize="22"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="Center" />
-                            <Button Text="+"
-                                    FontAttributes="Bold"
-                                    WidthRequest="30"
-                                    HeightRequest="30"
-                                    FontSize="20"
-                                    BackgroundColor="#F5F5F5"
-                                    CornerRadius="15"
-                                    TextColor="Black"
-                                    Clicked="IncreaseValue" />
-                        </HorizontalStackLayout>
-                        <!-- Delete Icon on the far right -->
-                        <Button ImageSource="bin.png"
-                                WidthRequest="40"
-                                HeightRequest="40"
-                                CornerRadius="20"
-                                VerticalOptions="End"
-                                Grid.Column="2"
-                                BackgroundColor="Transparent" />
+             x:DataType="viewModels:EditBudgetViewModel"
+             Title="{Binding Title}"
+             BackgroundColor="#F5F5F5">
+    <ScrollView Padding="20">
+        <StackLayout Spacing="20">
+            <!-- Budget Name -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="12"
+                   Padding="0"
+                   HasShadow="True">
+                <StackLayout Padding="15"
+                             Spacing="5">
+                    <Label Text="Budget Name"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
+                    <Entry Text="{Binding BudgetName}"
+                           Placeholder="Enter budget name"
+                           BackgroundColor="Transparent"
+                           TextColor="Black" />
+                </StackLayout>
+            </Frame>
+            <!-- Budget Amount -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="12"
+                   Padding="0"
+                   HasShadow="True">
+                <StackLayout Padding="15"
+                             Spacing="5">
+                    <Label Text="Budget Amount"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
+                    <Entry Text="{Binding BudgetAmount}"
+                           Placeholder="0.00"
+                           Keyboard="Numeric"
+                           BackgroundColor="Transparent"
+                           TextColor="Black" />
+                </StackLayout>
+            </Frame>
+            <!-- Description -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="12"
+                   Padding="0"
+                   HasShadow="True">
+                <StackLayout Padding="15"
+                             Spacing="5">
+                    <Label Text="Description"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
+                    <Editor Text="{Binding BudgetDescription}"
+                            Placeholder="Enter budget description (optional)"
+                            HeightRequest="100"
+                            BackgroundColor="Transparent"
+                            TextColor="Black" />
+                </StackLayout>
+            </Frame>
+            <!-- Date Range -->
+            <Frame BackgroundColor="White"
+                   CornerRadius="12"
+                   Padding="0"
+                   HasShadow="True">
+                <StackLayout Padding="15"
+                             Spacing="15">
+                    <Label Text="Budget Period"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Black" />
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <StackLayout Grid.Column="0"
+                                     Spacing="5">
+                            <Label Text="Start Date"
+                                   FontSize="14"
+                                   TextColor="Gray" />
+                            <DatePicker Date="{Binding BudgetStartDate}"
+                                        BackgroundColor="LightGray"
+                                        TextColor="Black" />
+                        </StackLayout>
+                        <StackLayout Grid.Column="1"
+                                     Spacing="5">
+                            <Label Text="End Date"
+                                   FontSize="14"
+                                   TextColor="Gray" />
+                            <DatePicker Date="{Binding BudgetEndDate}"
+                                        BackgroundColor="LightGray"
+                                        TextColor="Black" />
+                        </StackLayout>
                     </Grid>
-                </Border>
-            </VerticalStackLayout>
-            <Button Text="Save"
-                    Padding="10"
-                    Margin="0,50,0,10"
-                    BackgroundColor="#210F37" />
-            <Button Text="Delete"
-                    Padding="10"
-                    TextColor="#210F37"
-                    BorderColor="#210F37"
-                    BorderWidth="2"
-                    BackgroundColor="Transparent" />
-            <!-- <Label Text="Select Category" /> -->
-            <!-- <Picker Title="Select Category"
-                    SelectedIndexChanged="OnCategorySelected">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Food</x:String>
-                        <x:String>Transport</x:String>
-                        <x:String>Entertainment</x:String>
-                        <x:String>Utilities</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker> -->
-        </VerticalStackLayout>
+                </StackLayout>
+            </Frame>
+            <!-- Action Buttons -->
+            <StackLayout Spacing="10"
+                         Margin="0,20,0,0">
+                <!-- Update Button -->
+                <Button Text="Update Budget"
+                        Command="{Binding UpdateBudgetCommand}"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        HeightRequest="50"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                <!-- Delete Button -->
+                <Button Text="Delete Budget"
+                        Command="{Binding DeleteBudgetCommand}"
+                        BackgroundColor="#F44336"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        HeightRequest="50"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+                <!-- Cancel Button -->
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="LightGray"
+                        TextColor="Black"
+                        FontSize="16"
+                        CornerRadius="12"
+                        HeightRequest="50"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+            </StackLayout>
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="#210F37"
+                               HeightRequest="50" />
+        </StackLayout>
     </ScrollView>
 </ContentPage>
