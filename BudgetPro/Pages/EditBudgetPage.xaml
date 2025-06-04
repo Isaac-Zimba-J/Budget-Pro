@@ -4,135 +4,135 @@
              xmlns:viewModels="clr-namespace:BudgetPro.ViewModels"
              x:Class="BudgetPro.Pages.EditBudgetPage"
              x:DataType="viewModels:EditBudgetViewModel"
-             Title="{Binding Title}"
+             Title="Edit Budget"
              BackgroundColor="#F5F5F5">
-    <ScrollView Padding="20">
-        <StackLayout Spacing="20">
-            <!-- Budget Name -->
-            <Frame BackgroundColor="White"
-                   CornerRadius="12"
-                   Padding="0"
-                   HasShadow="True">
-                <StackLayout Padding="15"
-                             Spacing="5">
-                    <Label Text="Budget Name"
-                           FontSize="16"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                    <Entry Text="{Binding BudgetName}"
-                           Placeholder="Enter budget name"
-                           BackgroundColor="Transparent"
-                           TextColor="Black" />
-                </StackLayout>
-            </Frame>
-            <!-- Budget Amount -->
-            <Frame BackgroundColor="White"
-                   CornerRadius="12"
-                   Padding="0"
-                   HasShadow="True">
-                <StackLayout Padding="15"
-                             Spacing="5">
-                    <Label Text="Budget Amount"
-                           FontSize="16"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                    <Entry Text="{Binding BudgetAmount}"
-                           Placeholder="0.00"
-                           Keyboard="Numeric"
-                           BackgroundColor="Transparent"
-                           TextColor="Black" />
-                </StackLayout>
-            </Frame>
-            <!-- Description -->
-            <Frame BackgroundColor="White"
-                   CornerRadius="12"
-                   Padding="0"
-                   HasShadow="True">
-                <StackLayout Padding="15"
-                             Spacing="5">
-                    <Label Text="Description"
-                           FontSize="16"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                    <Editor Text="{Binding BudgetDescription}"
-                            Placeholder="Enter budget description (optional)"
-                            HeightRequest="100"
-                            BackgroundColor="Transparent"
-                            TextColor="Black" />
-                </StackLayout>
-            </Frame>
-            <!-- Date Range -->
-            <Frame BackgroundColor="White"
-                   CornerRadius="12"
-                   Padding="0"
-                   HasShadow="True">
-                <StackLayout Padding="15"
-                             Spacing="15">
-                    <Label Text="Budget Period"
-                           FontSize="16"
-                           FontAttributes="Bold"
-                           TextColor="Black" />
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="10">
-                        <StackLayout Grid.Column="0"
-                                     Spacing="5">
-                            <Label Text="Start Date"
-                                   FontSize="14"
-                                   TextColor="Gray" />
-                            <DatePicker Date="{Binding BudgetStartDate}"
-                                        BackgroundColor="LightGray"
-                                        TextColor="Black" />
-                        </StackLayout>
-                        <StackLayout Grid.Column="1"
-                                     Spacing="5">
-                            <Label Text="End Date"
-                                   FontSize="14"
-                                   TextColor="Gray" />
-                            <DatePicker Date="{Binding BudgetEndDate}"
-                                        BackgroundColor="LightGray"
-                                        TextColor="Black" />
-                        </StackLayout>
-                    </Grid>
-                </StackLayout>
-            </Frame>
-            <!-- Action Buttons -->
-            <StackLayout Spacing="10"
-                         Margin="0,20,0,0">
-                <!-- Update Button -->
-                <Button Text="Update Budget"
-                        Command="{Binding UpdateBudgetCommand}"
-                        BackgroundColor="#4CAF50"
+    <ScrollView Padding="10">
+        <VerticalStackLayout Spacing="5">
+            <!-- Budget Inputs -->
+            <VerticalStackLayout Spacing="10"
+                                 Padding="10,0,10,20">
+                <Entry Text="{Binding BudgetName}"
+                       Placeholder="Budget Name"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       HeightRequest="50"
+                        />
+                <Entry Text="{Binding BudgetAmount}"
+                       Placeholder="Amount"
+                       Keyboard="Numeric"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       HeightRequest="50"
+                        />
+            </VerticalStackLayout>
+            <!-- Items Header and Add Button -->
+            <Grid ColumnDefinitions="*,Auto"
+                  Padding="0">
+                <Label Text="Items"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       Grid.Column="0" />
+                <Button Text="Add Item"
+                        Command="{Binding AddItemCommand}"
+                        WidthRequest="90"
+                        Grid.Column="1"
+                        BackgroundColor="#210F37"
                         TextColor="White"
-                        FontSize="16"
-                        FontAttributes="Bold"
-                        CornerRadius="12"
-                        HeightRequest="50"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
-                <!-- Delete Button -->
-                <Button Text="Delete Budget"
-                        Command="{Binding DeleteBudgetCommand}"
-                        BackgroundColor="#F44336"
-                        TextColor="White"
-                        FontSize="16"
-                        FontAttributes="Bold"
-                        CornerRadius="12"
-                        HeightRequest="50"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
-                <!-- Cancel Button -->
-                <Button Text="Cancel"
-                        Command="{Binding CancelCommand}"
-                        BackgroundColor="LightGray"
-                        TextColor="Black"
-                        FontSize="16"
-                        CornerRadius="12"
-                        HeightRequest="50"
-                        IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
-            </StackLayout>
+                        FontSize="14"
+                        CornerRadius="8" />
+            </Grid>
+            <!-- Item List -->
+            <CollectionView ItemsSource="{Binding BudgetItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                BackgroundColor="#FFFFFF"
+                                Padding="10"
+                                Margin="0,5">
+                            <Grid ColumnDefinitions="*,Auto,Auto"
+                                  RowDefinitions="Auto,Auto">
+                                <!-- Item Name -->
+                                <Label Text="{Binding Name}"
+                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="StartAndExpand" />
+                                <!-- Item Price -->
+                                <Label Text="{Binding PriceFormatted}"
+                                       Grid.Row="1"
+                                       Grid.Column="0"
+                                       FontSize="14"
+                                       TextColor="Gray" />
+                                <!-- Quantity Stepper -->
+                                <HorizontalStackLayout Grid.Column="1"
+                                                       VerticalOptions="Center"
+                                                       Spacing="5"
+                                                       Grid.RowSpan="2">
+                                    <Button Text="−"
+                                            WidthRequest="30"
+                                            HeightRequest="30"
+                                            FontSize="20"
+                                            Command="{Binding BindingContext.DecreaseQuantityCommand, Source={x:Reference Name=EditBudgetPage}}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#F5F5F5"
+                                            CornerRadius="15"
+                                            TextColor="Black" />
+                                    <Label Text="{Binding Quantity}"
+                                           FontAttributes="Bold"
+                                           FontSize="22"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center" />
+                                    <Button Text="+"
+                                            WidthRequest="30"
+                                            HeightRequest="30"
+                                            FontSize="20"
+                                            Command="{Binding BindingContext.IncreaseQuantityCommand, Source={x:Reference Name=EditBudgetPage}}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#F5F5F5"
+                                            CornerRadius="15"
+                                            TextColor="Black" />
+                                </HorizontalStackLayout>
+                                <!-- Delete Icon -->
+                                <Button ImageSource="bin.png"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        CornerRadius="20"
+                                        VerticalOptions="End"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding BindingContext.DeleteItemCommand, Source={x:Reference Name=EditBudgetPage}}"
+                                        CommandParameter="{Binding .}"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <!-- Save and Delete -->
+            <Button Text="Save"
+                    Command="{Binding UpdateBudgetCommand}"
+                    Padding="10"
+                    Margin="0,50,0,10"
+                    BackgroundColor="#210F37"
+                    TextColor="White"
+                    CornerRadius="8" />
+            <Button Text="Delete"
+                    Command="{Binding DeleteBudgetCommand}"
+                    Padding="10"
+                    TextColor="#210F37"
+                    BorderColor="#210F37"
+                    BorderWidth="2"
+                    BackgroundColor="Transparent"
+                    CornerRadius="8" />
             <!-- Loading Indicator -->
-            <ActivityIndicator IsVisible="{Binding IsBusy}"
-                               IsRunning="{Binding IsBusy}"
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
                                Color="#210F37"
-                               HeightRequest="50" />
-        </StackLayout>
+                               HeightRequest="40" />
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
