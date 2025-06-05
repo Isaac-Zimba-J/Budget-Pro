@@ -82,7 +82,7 @@
                                                        Grid.RowSpan="2"
                                                        VerticalOptions="Center"
                                                        HorizontalOptions="Center"
-                                                       Spacing="8">
+                                                       Spacing="4">
                                     <Button Text="−"
                                             WidthRequest="35"
                                             HeightRequest="35"
@@ -90,8 +90,8 @@
                                             BackgroundColor="#F5F5F5"
                                             CornerRadius="20"
                                             TextColor="Black"
-                                            BorderColor="#CCCCCC"
-                                            BorderWidth="1"
+                                            BorderColor="Transparent"
+                                            BorderWidth="0"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditBudgetViewModel}}, Path=DecreaseQuantityCommand}"
                                             CommandParameter="{Binding .}" />
                                     <Label Text="{Binding Quantity}"
@@ -110,8 +110,8 @@
                                             BackgroundColor="#F5F5F5"
                                             CornerRadius="20"
                                             TextColor="Black"
-                                            BorderColor="#CCCCCC"
-                                            BorderWidth="1"
+                                            BorderColor="Transparent"
+                                            BorderWidth="0"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:EditBudgetViewModel}}, Path=IncreaseQuantityCommand}"
                                             CommandParameter="{Binding .}" />
                                 </HorizontalStackLayout>

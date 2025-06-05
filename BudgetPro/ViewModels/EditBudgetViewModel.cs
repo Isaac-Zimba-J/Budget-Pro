@@ -97,21 +97,30 @@ namespace BudgetPro.ViewModels
             TotalItemsPrice = BudgetItems?.Sum(item => item.Price * item.Quantity) ?? 0;
         }
 
+        // Update the AddItem method to include quantity input
         [RelayCommand]
         public async Task AddItem()
         {
             try
             {
-                // Show input dialog for item details
+                // Show input dialog for item name
                 var itemName = await Shell.Current.DisplayPromptAsync("Add Item", "Enter item name:");
                 if (string.IsNullOrWhiteSpace(itemName))
                     return;
 
+                // Show input dialog for item price
                 var priceInput = await Shell.Current.DisplayPromptAsync("Add Item", "Enter item price:", keyboard: Keyboard.Numeric);
                 if (string.IsNullOrWhiteSpace(priceInput) || !double.TryParse(priceInput, out double price) || price <= 0)
                 {
                     await Shell.Current.DisplayAlert("Error", "Please enter a valid price", "OK");
                     return;
+                }
+
+                // Show input dialog for item quantity
+                var quantityInput = await Shell.Current.DisplayPromptAsync("Add Item", "Enter quantity:", initialValue: "1", keyboard: Keyboard.Numeric);
+                if (string.IsNullOrWhiteSpace(quantityInput) || !int.TryParse(quantityInput, out int quantity) || quantity <= 0)
+                {
+                    quantity = 1; // Default to 1 if invalid input
                 }
 
                 // Create new budget item
@@ -120,25 +129,27 @@ namespace BudgetPro.ViewModels
                     Id = Guid.NewGuid().ToString(),
                     Name = itemName,
                     Price = price,
-                    Quantity = 1,
+                    Quantity = quantity,
                     BudgetId = Budget.Id,
                     Created = DateTime.UtcNow,
                     Updated = DateTime.UtcNow,
                     IsDeleted = false
                 };
 
-                // Add to observable collection for UI
+                // Add to collection
                 BudgetItems.Add(newItem);
 
-                Console.WriteLine($"Added new item: {newItem.Name} - ${newItem.Price}");
+                Console.WriteLine($"Added new item: {newItem.Name} - ${newItem.Price} x {newItem.Quantity}");
 
-                // Make sure Budget.BudgetItems is initialized
+                // Update the budget's items list
                 if (Budget.BudgetItems == null)
                     Budget.BudgetItems = new List<BudgetItem>();
 
-                // Add to the actual Budget object's items list
                 Budget.BudgetItems.Add(newItem);
                 Budget.Updated = DateTime.UtcNow;
+
+                // Update total price calculation
+                CalculateTotalItemsPrice();
 
                 await Shell.Current.DisplayAlert("Success", "Item added successfully!", "OK");
             }
@@ -149,6 +160,7 @@ namespace BudgetPro.ViewModels
             }
         }
 
+        // Update the DeleteItem method to include confirmation
         [RelayCommand]
         public async Task DeleteItem(BudgetItem item)
         {
@@ -156,13 +168,14 @@ namespace BudgetPro.ViewModels
 
             try
             {
+                // Ask for confirmation before deleting
                 var result = await Shell.Current.DisplayAlert(
-                    "Delete Item",
+                    "Confirm Delete",
                     $"Are you sure you want to delete '{item.Name}'?",
-                    "Delete",
+                    "Yes, Delete",
                     "Cancel");
 
-                if (!result) return;
+                if (!result) return; // User canceled
 
                 // Remove from UI collection
                 BudgetItems.Remove(item);
@@ -179,8 +192,10 @@ namespace BudgetPro.ViewModels
 
                 Budget.Updated = DateTime.UtcNow;
 
+                // Update total price calculation
+                CalculateTotalItemsPrice();
+
                 Console.WriteLine($"Deleted item: {item.Name}");
-                await Shell.Current.DisplayAlert("Success", "Item deleted successfully!", "OK");
             }
             catch (Exception ex)
             {
