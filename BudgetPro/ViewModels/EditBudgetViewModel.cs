@@ -4,11 +4,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
+using System.Linq;
 
 namespace BudgetPro.ViewModels
 {
@@ -26,7 +28,7 @@ namespace BudgetPro.ViewModels
             _firestoreService = firestoreService;
             _userService = userService;
 
-            // Create HTTP client with HTTP/1.1 (same pattern as AddBudgetViewModel)
+            // Create HTTP client with HTTP/1.1
             _httpClient = new HttpClient(new HttpClientHandler
             {
                 SslProtocols = System.Security.Authentication.SslProtocols.Tls12
@@ -34,6 +36,9 @@ namespace BudgetPro.ViewModels
             _httpClient.DefaultRequestVersion = new Version(1, 1);
 
             Title = "Edit Budget";
+
+            // Initialize BudgetItems collection
+            BudgetItems = new ObservableCollection<BudgetItem>();
         }
 
         [ObservableProperty]
@@ -49,10 +54,10 @@ namespace BudgetPro.ViewModels
         private string _budgetDescription = string.Empty;
 
         [ObservableProperty]
-        private DateTime _budgetStartDate = DateTime.UtcNow;
+        private ObservableCollection<BudgetItem> _budgetItems;
 
         [ObservableProperty]
-        private DateTime _budgetEndDate = DateTime.UtcNow.AddMonths(1);
+        private double _totalItemsPrice;
 
         // This method is called when the Budget property is set via navigation
         partial void OnBudgetChanged(Budget value)
@@ -64,11 +69,166 @@ namespace BudgetPro.ViewModels
                 BudgetName = value.Name;
                 BudgetAmount = value.TotalAmount;
                 BudgetDescription = value.Description ?? string.Empty;
-                BudgetStartDate = value.Created;
-                BudgetEndDate = value.Updated;
+
+                // Load existing budget items
+                BudgetItems.Clear();
+                if (value.BudgetItems != null)
+                {
+                    foreach (var item in value.BudgetItems)
+                    {
+                        BudgetItems.Add(item);
+                    }
+                }
 
                 Title = $"Edit {value.Name}";
+                Console.WriteLine($"Loaded {BudgetItems.Count} items for budget");
             }
+        }
+
+        // Update this method to calculate total price
+        partial void OnBudgetItemsChanged(ObservableCollection<BudgetItem> value)
+        {
+            CalculateTotalItemsPrice();
+        }
+
+        // Add this method to calculate total price
+        private void CalculateTotalItemsPrice()
+        {
+            TotalItemsPrice = BudgetItems?.Sum(item => item.Price * item.Quantity) ?? 0;
+        }
+
+        [RelayCommand]
+        public async Task AddItem()
+        {
+            try
+            {
+                // Show input dialog for item details
+                var itemName = await Shell.Current.DisplayPromptAsync("Add Item", "Enter item name:");
+                if (string.IsNullOrWhiteSpace(itemName))
+                    return;
+
+                var priceInput = await Shell.Current.DisplayPromptAsync("Add Item", "Enter item price:", keyboard: Keyboard.Numeric);
+                if (string.IsNullOrWhiteSpace(priceInput) || !double.TryParse(priceInput, out double price) || price <= 0)
+                {
+                    await Shell.Current.DisplayAlert("Error", "Please enter a valid price", "OK");
+                    return;
+                }
+
+                // Create new budget item
+                var newItem = new BudgetItem
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = itemName,
+                    Price = price,
+                    Quantity = 1,
+                    BudgetId = Budget.Id,
+                    Created = DateTime.UtcNow,
+                    Updated = DateTime.UtcNow,
+                    IsDeleted = false
+                };
+
+                // Add to observable collection for UI
+                BudgetItems.Add(newItem);
+
+                Console.WriteLine($"Added new item: {newItem.Name} - ${newItem.Price}");
+
+                // Make sure Budget.BudgetItems is initialized
+                if (Budget.BudgetItems == null)
+                    Budget.BudgetItems = new List<BudgetItem>();
+
+                // Add to the actual Budget object's items list
+                Budget.BudgetItems.Add(newItem);
+                Budget.Updated = DateTime.UtcNow;
+
+                await Shell.Current.DisplayAlert("Success", "Item added successfully!", "OK");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding item: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", $"Failed to add item: {ex.Message}", "OK");
+            }
+        }
+
+        [RelayCommand]
+        public async Task DeleteItem(BudgetItem item)
+        {
+            if (item == null) return;
+
+            try
+            {
+                var result = await Shell.Current.DisplayAlert(
+                    "Delete Item",
+                    $"Are you sure you want to delete '{item.Name}'?",
+                    "Delete",
+                    "Cancel");
+
+                if (!result) return;
+
+                // Remove from UI collection
+                BudgetItems.Remove(item);
+
+                // Remove from budget's items list
+                if (Budget.BudgetItems != null)
+                {
+                    var budgetItem = Budget.BudgetItems.FirstOrDefault(x => x.Id == item.Id);
+                    if (budgetItem != null)
+                    {
+                        Budget.BudgetItems.Remove(budgetItem);
+                    }
+                }
+
+                Budget.Updated = DateTime.UtcNow;
+
+                Console.WriteLine($"Deleted item: {item.Name}");
+                await Shell.Current.DisplayAlert("Success", "Item deleted successfully!", "OK");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting item: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", $"Failed to delete item: {ex.Message}", "OK");
+            }
+        }
+
+        [RelayCommand]
+        public void IncreaseQuantity(BudgetItem item)
+        {
+            if (item == null) return;
+
+            item.Quantity++;
+            item.Updated = DateTime.UtcNow;
+            Budget.Updated = DateTime.UtcNow;
+
+            // Update the item in the budget's items list as well
+            var budgetItem = Budget.BudgetItems?.FirstOrDefault(x => x.Id == item.Id);
+            if (budgetItem != null)
+            {
+                budgetItem.Quantity = item.Quantity;
+                budgetItem.Updated = DateTime.UtcNow;
+            }
+
+            CalculateTotalItemsPrice();
+            Console.WriteLine($"Increased quantity for {item.Name}: {item.Quantity}");
+        }
+
+        [RelayCommand]
+        public void DecreaseQuantity(BudgetItem item)
+        {
+            if (item == null || item.Quantity <= 1) return;
+
+            item.Quantity--;
+            item.Updated = DateTime.UtcNow;
+            Budget.Updated = DateTime.UtcNow;
+
+            // Update the item in the budget's items list as well
+            var budgetItem = Budget.BudgetItems?.FirstOrDefault(x => x.Id == item.Id);
+            if (budgetItem != null)
+            {
+                budgetItem.Quantity = item.Quantity;
+                budgetItem.Updated = DateTime.UtcNow;
+            }
+
+            CalculateTotalItemsPrice();
+            Console.WriteLine($"Decreased quantity for {item.Name}: {item.Quantity}");
         }
 
         [RelayCommand]
@@ -77,12 +237,6 @@ namespace BudgetPro.ViewModels
             if (string.IsNullOrWhiteSpace(BudgetName) || BudgetAmount <= 0)
             {
                 await Shell.Current.DisplayAlert("Error", "Please enter valid budget details", "OK");
-                return;
-            }
-
-            if (BudgetEndDate <= BudgetStartDate)
-            {
-                await Shell.Current.DisplayAlert("Error", "End date must be after start date", "OK");
                 return;
             }
 
@@ -97,14 +251,17 @@ namespace BudgetPro.ViewModels
                     return;
                 }
 
-                // Update the budget object
+                // Update the budget object with current values
                 Budget.Name = BudgetName;
                 Budget.Description = BudgetDescription;
                 Budget.TotalAmount = BudgetAmount;
-                Budget.Created = BudgetStartDate;
                 Budget.Updated = DateTime.UtcNow;
 
-                Console.WriteLine($"Updating budget: {Budget.Id}");
+                // Make sure the budget items are up to date by copying from the observable collection
+                // This is crucial - make sure we're updating the right collection
+                Budget.BudgetItems = new List<BudgetItem>(BudgetItems);
+
+                Console.WriteLine($"Updating budget: {Budget.Id} with {Budget.BudgetItems.Count} items");
 
                 // Try normal Firestore service first, then fallback to REST API
                 try
@@ -113,6 +270,7 @@ namespace BudgetPro.ViewModels
                 }
                 catch (Exception ex) when (ex.Message.Contains("HTTP/2") || ex.Message.Contains("gRPC"))
                 {
+                    Console.WriteLine($"Falling back to REST API due to: {ex.Message}");
                     // Fallback to direct REST API call
                     await UpdateBudgetDirectly(Budget);
                 }
@@ -185,7 +343,7 @@ namespace BudgetPro.ViewModels
 
         private async Task UpdateBudgetDirectly(Budget budget)
         {
-            // Use direct REST API call to Firebase as fallback (same pattern as AddBudgetViewModel)
+            // Use direct REST API call to Firebase as fallback
             string projectId = "budgetpro-33542";
             string authToken = await _userService.GetAuthToken();
 
@@ -194,24 +352,57 @@ namespace BudgetPro.ViewModels
                 throw new UnauthorizedAccessException("No auth token available");
             }
 
-            // Create direct Firestore document update
+            Console.WriteLine($"Updating budget via REST API with {budget.BudgetItems?.Count ?? 0} items");
+
+            // Create proper array values for budget items
+            var budgetItemsArray = new List<object>();
+
+            if (budget.BudgetItems != null && budget.BudgetItems.Any())
+            {
+                foreach (var item in budget.BudgetItems)
+                {
+                    Console.WriteLine($"Processing item: {item.Id} - {item.Name}");
+
+                    // Add each item as a map value
+                    budgetItemsArray.Add(new
+                    {
+                        mapValue = new
+                        {
+                            fields = new
+                            {
+                                Id = new { stringValue = item.Id },
+                                Name = new { stringValue = item.Name },
+                                Price = new { doubleValue = item.Price },
+                                Quantity = new { integerValue = item.Quantity.ToString() }, // Firebase expects string
+                                BudgetId = new { stringValue = item.BudgetId },
+                                Created = new { timestampValue = item.Created.ToUniversalTime().ToString("o") },
+                                Updated = new { timestampValue = item.Updated.ToUniversalTime().ToString("o") },
+                                IsDeleted = new { booleanValue = item.IsDeleted }
+                            }
+                        }
+                    });
+                }
+            }
+
+            // Create direct Firestore document update with budget items array
             var firestoreObject = new
             {
                 fields = new
                 {
                     Id = new { stringValue = budget.Id },
                     Name = new { stringValue = budget.Name },
-                    Description = new { stringValue = budget.Description },
+                    Description = new { stringValue = budget.Description ?? string.Empty },
                     TotalAmount = new { doubleValue = budget.TotalAmount },
                     UserId = new { stringValue = budget.UserId },
-
                     Created = new { timestampValue = budget.Created.ToUniversalTime().ToString("o") },
                     Updated = new { timestampValue = budget.Updated.ToUniversalTime().ToString("o") },
-                    IsDeleted = new { booleanValue = budget.IsDeleted }
+                    IsDeleted = new { booleanValue = budget.IsDeleted },
+                    BudgetItems = new { arrayValue = new { values = budgetItemsArray } }
                 }
             };
 
-            string jsonPayload = JsonConvert.SerializeObject(firestoreObject);
+            string jsonPayload = JsonConvert.SerializeObject(firestoreObject, Formatting.Indented);
+            Console.WriteLine($"Sending payload to Firestore: {jsonPayload}");
 
             var url = $"https://firestore.googleapis.com/v1/projects/{projectId}/databases/(default)/documents/budgets/{budget.Id}";
 
@@ -220,14 +411,15 @@ namespace BudgetPro.ViewModels
             request.Content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
             {
-                string errorContent = await response.Content.ReadAsStringAsync();
-                throw new Exception($"Firebase REST API error: {response.StatusCode}, {errorContent}");
+                Console.WriteLine($"Firebase REST API error: {response.StatusCode}, {responseContent}");
+                throw new Exception($"Firebase REST API error: {response.StatusCode}, {responseContent}");
             }
 
-            Console.WriteLine($"Budget {budget.Id} successfully updated via REST API!");
+            Console.WriteLine($"Budget {budget.Id} successfully updated via REST API with {budgetItemsArray.Count} items!");
         }
 
         private string GetCurrentUserId()

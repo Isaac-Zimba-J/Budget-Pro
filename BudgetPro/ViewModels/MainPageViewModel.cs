@@ -230,8 +230,8 @@ namespace BudgetPro.ViewModels
 
         private double CalculateSpent(Budget budget)
         {
-            // Calculate total spent for a budget based on budget items
-            return budget.BudgetItems?.Sum(i => (double)i.Amount) ?? 0;
+            // Calculate total spent for a budget based on budget items (price * quantity)
+            return budget.BudgetItems?.Sum(i => i.Price * i.Quantity) ?? 0;
         }
 
         [RelayCommand]
@@ -246,9 +246,10 @@ namespace BudgetPro.ViewModels
             if (budget == null)
                 return;
 
+            // Use the same method as EditBudget to pass the full Budget object
             await _navigationService.NavigateToAsync("EditBudgetPage", new Dictionary<string, object>
             {
-                { "BudgetId", budget.Id }
+                { "Budget", budget }  // Changed from "BudgetId" to "Budget"
             });
         }
 
@@ -392,7 +393,7 @@ namespace BudgetPro.ViewModels
             }
         }
 
-        // Add this helper method to convert Firestore document to Budget object
+        // Update this helper method to convert Firestore document to Budget object
         private Budget ConvertFirestoreDocumentToBudget(FirestoreDocument doc)
         {
             if (doc?.Fields == null)
@@ -425,8 +426,68 @@ namespace BudgetPro.ViewModels
             if (doc.Fields.TryGetValue("IsDeleted", out var deletedField) && deletedField.BooleanValue.HasValue)
                 budget.IsDeleted = deletedField.BooleanValue.Value;
 
-            // Initialize empty BudgetItems list
+            // Extract budget items
             budget.BudgetItems = new List<BudgetItem>();
+
+            // Check if BudgetItems array exists in the document
+            if (doc.Fields.TryGetValue("BudgetItems", out var budgetItemsField) &&
+                budgetItemsField.ArrayValue?.Values != null)
+            {
+                Console.WriteLine($"Found {budgetItemsField.ArrayValue.Values.Count} budget items in document");
+
+                foreach (var itemValue in budgetItemsField.ArrayValue.Values)
+                {
+                    try
+                    {
+                        if (itemValue.MapValue?.Fields != null)
+                        {
+                            var item = new BudgetItem();
+                            var fields = itemValue.MapValue.Fields;
+
+                            // Extract item properties
+                            if (fields.TryGetValue("Id", out var itemIdField) && itemIdField.StringValue != null)
+                                item.Id = itemIdField.StringValue;
+
+                            if (fields.TryGetValue("Name", out var itemNameField) && itemNameField.StringValue != null)
+                                item.Name = itemNameField.StringValue;
+
+                            if (fields.TryGetValue("Price", out var priceField) && priceField.DoubleValue.HasValue)
+                                item.Price = priceField.DoubleValue.Value;
+
+                            if (fields.TryGetValue("Quantity", out var qtyField))
+                            {
+                                if (qtyField.IntegerValue != null)
+                                    item.Quantity = int.Parse(qtyField.IntegerValue);
+                                else if (qtyField.DoubleValue.HasValue)
+                                    item.Quantity = (int)qtyField.DoubleValue.Value;
+                            }
+
+                            if (fields.TryGetValue("BudgetId", out var budgetIdField) && budgetIdField.StringValue != null)
+                                item.BudgetId = budgetIdField.StringValue;
+
+                            if (fields.TryGetValue("Created", out var itemCreatedField) && itemCreatedField.TimestampValue != null)
+                                item.Created = DateTime.Parse(itemCreatedField.TimestampValue).ToUniversalTime();
+
+                            if (fields.TryGetValue("Updated", out var itemUpdatedField) && itemUpdatedField.TimestampValue != null)
+                                item.Updated = DateTime.Parse(itemUpdatedField.TimestampValue).ToUniversalTime();
+
+                            if (fields.TryGetValue("IsDeleted", out var itemDeletedField) && itemDeletedField.BooleanValue.HasValue)
+                                item.IsDeleted = itemDeletedField.BooleanValue.Value;
+
+                            // Add the item to the budget's items list
+                            if (!item.IsDeleted)
+                            {
+                                budget.BudgetItems.Add(item);
+                                Console.WriteLine($"Added item: {item.Name} - ${item.Price} x {item.Quantity}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error parsing budget item: {ex.Message}");
+                    }
+                }
+            }
 
             return budget;
         }
@@ -449,6 +510,18 @@ namespace BudgetPro.ViewModels
             public double? DoubleValue { get; set; }
             public bool? BooleanValue { get; set; }
             public string TimestampValue { get; set; }
+            public FirestoreArrayValue ArrayValue { get; set; }
+            public FirestoreMapValue MapValue { get; set; }
+        }
+
+        public class FirestoreArrayValue
+        {
+            public List<FirestoreValue> Values { get; set; }
+        }
+
+        public class FirestoreMapValue
+        {
+            public Dictionary<string, FirestoreValue> Fields { get; set; }
         }
     }
 }

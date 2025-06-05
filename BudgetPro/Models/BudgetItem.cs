@@ -1,24 +1,38 @@
 using BudgetPro.Models.Enums;
 using Google.Cloud.Firestore;
+using System;
 
 namespace BudgetPro.Models;
 
 [FirestoreData]
 public class BudgetItem : BaseModel
 {
+    [FirestoreProperty]
+    public string Id { get; set; } = string.Empty;
 
     [FirestoreProperty]
-    public string BudgetId { get; set; } // Reference to budget
-    [FirestoreProperty]
+    public string Name { get; set; } = string.Empty;
 
-    public int Quantity { get; set; }
     [FirestoreProperty]
+    public double Price { get; set; }
 
-    public decimal Amount { get; set; }
     [FirestoreProperty]
+    public int Quantity { get; set; } = 1;
 
-    public string Category { get; set; } // Store enum as string
     [FirestoreProperty]
+    public string BudgetId { get; set; } = string.Empty;
 
-    public bool IsPurchase { get; set; } // Indicates if this item is a purchase or income
+    [FirestoreProperty]
+    public DateTime Created { get; set; } = DateTime.UtcNow;
+
+    [FirestoreProperty]
+    public DateTime Updated { get; set; } = DateTime.UtcNow;
+
+    [FirestoreProperty]
+    public bool IsDeleted { get; set; } = false;
+
+    // Calculated properties (not stored in Firestore)
+    public string PriceFormatted => $"${Price:F2} × {Quantity} = ${Price * Quantity:F2}";
+
+    public double TotalPrice => Price * Quantity;
 }
