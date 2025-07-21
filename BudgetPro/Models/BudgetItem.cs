@@ -74,6 +74,6 @@ public class BudgetItem : ObservableObject
     }
 
     // Calculated properties (not stored in Firestore)
-    public string PriceFormatted => $"${Price:F2} × {Quantity} = ${Price * Quantity:F2}";
+    public string PriceFormatted => $"K{Price:F2} × {Quantity} = K{Price * Quantity:F2}";
     public double TotalPrice => Price * Quantity;
 }

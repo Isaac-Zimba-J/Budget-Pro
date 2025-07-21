@@ -108,7 +108,7 @@ public partial class BudgetViewModel : BaseViewModel
                 ["Budget"] = budget
             };
 
-            await _navigationService.NavigateToAsync("EditBudgetPage", parameters);
+            await _navigationService.NavigateToAsync("TrackingPage", parameters);
         }
         catch (Exception ex)
         {

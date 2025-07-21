@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:BudgetPro.ViewModels"
+             xmlns:models="clr-namespace:BudgetPro.Models"
+             x:Class="BudgetPro.Pages.TrackingPage"
+             Title="TrackingPage">
+    <ScrollView Padding="10">
+        <VerticalStackLayout Spacing="5">
+            <Grid ColumnDefinitions="*,Auto"
+                  Padding="0,10,0,5">
+                <Label Text="Budget Items"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       Grid.Column="0" />
+            </Grid>
+            <!-- Budget Items Collection -->
+            <CollectionView ItemsSource="{Binding BudgetItems}"
+                            EmptyView="No items added yet. Tap 'Add Item' to add budget items."
+                            Margin="0,5,0,10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:BudgetItem">
+                        <Border StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                BackgroundColor="#F5F5F5"
+                                Padding="10"
+                                Margin="0,5">
+                            <Grid ColumnDefinitions="*,Auto,Auto"
+                                  RowDefinitions="Auto,Auto"
+                                  RowSpacing="5">
+                                <!-- Item Name on the left - FIXED -->
+                                <Label Text="{Binding Name}"
+                                       Grid.Column="0"
+                                       Grid.Row="0"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Start" />
+                                <!-- Price - FIXED -->
+                                <Label Text="{Binding PriceFormatted}"
+                                       FontSize="14"
+                                       TextColor="Gray"
+                                       Grid.Row="1"
+                                       Grid.Column="0"
+                                       HorizontalOptions="Start" />
+                                <!-- Quantity Controls on the right -->
+                                <HorizontalStackLayout Grid.Column="1"
+                                                       Grid.RowSpan="2"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Center"
+                                                       Spacing="4">
+                                    <Button Text="−"
+                                            WidthRequest="35"
+                                            HeightRequest="35"
+                                            FontSize="18"
+                                            BackgroundColor="#F5F5F5"
+                                            CornerRadius="20"
+                                            TextColor="Black"
+                                            BorderColor="Transparent"
+                                            BorderWidth="0"
+                                            Command="{Binding DecreaseQuantityCommand, Source={RelativeSource AncestorType={x:Type viewModels:TrackinngPageViewModel}}}"
+                                            CommandParameter="{Binding .}" />
+                                    <Label Text="{Binding Quantity}"
+                                           FontAttributes="Bold"
+                                           FontSize="18"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           WidthRequest="35"
+                                           HorizontalTextAlignment="Center"
+                                           TextColor="Black" />
+                                    <Button Text="+"
+                                            FontAttributes="Bold"
+                                            WidthRequest="35"
+                                            HeightRequest="35"
+                                            FontSize="18"
+                                            BackgroundColor="#F5F5F5"
+                                            CornerRadius="20"
+                                            TextColor="Black"
+                                            BorderColor="Transparent"
+                                            BorderWidth="0"
+                                            Command="{Binding IncreaseQuantityCommand, Source={RelativeSource AncestorType={x:Type viewModels:TrackinngPageViewModel}}}"
+                                            CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+                                <!-- Delete Button on the far right -->
+                                <Button Text="🗑️"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        FontSize="18"
+                                        CornerRadius="20"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Center"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding DeleteItemCommand, Source={RelativeSource AncestorType={x:Type viewModels:TrackinngPageViewModel}}}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <!-- Buttons -->
+            <Button Text="Save Budget"
+                    Padding="10"
+                    Margin="0,10,0,10"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Command="{Binding UpdateBudgetCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+            <Button Text="Delete Budget"
+                    Padding="10"
+                    TextColor="#F44336"
+                    BorderColor="#F44336"
+                    BorderWidth="2"
+                    BackgroundColor="Transparent"
+                    FontAttributes="Bold"
+                    CornerRadius="8"
+                    Command="{Binding DeleteBudgetCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsVisible="{Binding IsBusy}"
+                               IsRunning="{Binding IsBusy}"
+                               Color="#210F37"
+                               HeightRequest="50"
+                               Margin="0,10,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
