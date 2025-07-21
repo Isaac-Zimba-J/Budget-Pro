@@ -45,5 +45,32 @@ namespace BudgetPro
 
 			// In a production app, you would log this to a file or remote logging service
 		}
+
+		// Add this event handler for the logout menu item
+		private async void OnLogoutClicked(object sender, EventArgs e)
+		{
+			bool confirm = await Shell.Current.DisplayAlert(
+				"Log Out",
+				"Are you sure you want to log out?",
+				"Yes", "No");
+
+			if (confirm)
+			{
+				// Try to resolve the IUserService and INavigationService from DI
+				var userService = this.Handler?.MauiContext?.Services.GetService(typeof(BudgetPro.Services.Contracts.IUserService)) as BudgetPro.Services.Contracts.IUserService;
+				var navigationService = this.Handler?.MauiContext?.Services.GetService(typeof(BudgetPro.Services.Contracts.INavigationService)) as BudgetPro.Services.Contracts.INavigationService;
+
+				if (userService != null && navigationService != null)
+				{
+					await userService.ClearUserAsync();
+					await navigationService.NavigateToAsync("LoginPage");
+				}
+				else
+				{
+					// Fallback: just go to login page
+					await Shell.Current.GoToAsync("///LoginPage");
+				}
+			}
+		}
 	}
 }

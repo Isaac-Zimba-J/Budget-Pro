@@ -10,7 +10,8 @@
                   Route="Login" />
     <ShellContent ContentTemplate="{DataTemplate pages:RegisterPage}"
                   Route="RegisterPage" />
-    <TabBar>
+    <FlyoutItem Title="Menu"
+                Icon="home.png">
         <ShellContent Title="Home"
                       Icon="home.png"
                       ContentTemplate="{DataTemplate local:MainPage}"
@@ -23,6 +24,26 @@
                       Icon="friend.png"
                       ContentTemplate="{DataTemplate pages:ChatPage}"
                       Route="ChatPage" />
+        <!-- <ShellContent Title="Settings"
+                      Icon="settings_icon.png"
+                      ContentTemplate="{DataTemplate pages:SettingsPage}" /> -->
+    </FlyoutItem>
+    <MenuItem Text="Logout"
+              Clicked="OnLogoutClicked"
+              IconImageSource="bin.png" />
+    <TabBar>
+        <!-- <ShellContent Title="Home"
+                      Icon="home.png"
+                      ContentTemplate="{DataTemplate local:MainPage}"
+                      Route="MainPage" /> -->
+        <!-- <ShellContent Title="Budgets"
+                      Icon="editing.png"
+                      ContentTemplate="{DataTemplate pages:BudgetsPage}"
+                      Route="BudgetsPage" /> -->
+        <!-- <ShellContent Title="Chat"
+                      Icon="friend.png"
+                      ContentTemplate="{DataTemplate pages:ChatPage}"
+                      Route="ChatPage" /> -->
         <!-- <ShellContent Title="Settings"
                       Icon="settings_icon.png"
                       ContentTemplate="{DataTemplate pages:SettingsPage}" /> -->

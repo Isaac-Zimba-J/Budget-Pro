@@ -11,6 +11,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
 using System.Linq;
+using BudgetPro.Services;
+using Google.Cloud.Firestore;
 
 namespace BudgetPro.ViewModels
 {
@@ -21,12 +23,14 @@ namespace BudgetPro.ViewModels
         private readonly IFirestoreService _firestoreService;
         private readonly IUserService _userService;
         private readonly HttpClient _httpClient;
+        private readonly ItemService _itemService;
 
-        public EditBudgetViewModel(INavigationService navigationService, IFirestoreService firestoreService, IUserService userService)
+        public EditBudgetViewModel(INavigationService navigationService, IFirestoreService firestoreService, IUserService userService, ItemService itemService)
         {
             _navigationService = navigationService;
             _firestoreService = firestoreService;
             _userService = userService;
+            _itemService = itemService;
 
             // Create HTTP client with HTTP/1.1
             _httpClient = new HttpClient(new HttpClientHandler
@@ -70,17 +74,8 @@ namespace BudgetPro.ViewModels
                 BudgetAmount = value.TotalAmount;
                 BudgetDescription = value.Description ?? string.Empty;
 
-                // Load existing budget items
-                BudgetItems.Clear();
-                if (value.BudgetItems != null)
-                {
-                    foreach (var item in value.BudgetItems)
-                    {
-                        BudgetItems.Add(item);
-                    }
-                }
-
                 Title = $"Edit {value.Name}";
+                LoadItemsAsync();
                 Console.WriteLine($"Loaded {BudgetItems.Count} items for budget");
             }
         }
@@ -97,10 +92,19 @@ namespace BudgetPro.ViewModels
             TotalItemsPrice = BudgetItems?.Sum(item => item.Price * item.Quantity) ?? 0;
         }
 
+        private async void LoadItemsAsync()
+        {
+            if (Budget == null) return;
+            var items = await _itemService.GetAllAsync(Budget.Id);
+            BudgetItems = new ObservableCollection<BudgetItem>(items);
+            CalculateTotalItemsPrice();
+        }
+
         // Update the AddItem method to include quantity input
         [RelayCommand]
         public async Task AddItem()
         {
+            if (Budget == null) return;
             try
             {
                 // Show input dialog for item name
@@ -164,7 +168,7 @@ namespace BudgetPro.ViewModels
         [RelayCommand]
         public async Task DeleteItem(BudgetItem item)
         {
-            if (item == null) return;
+            if (item == null || Budget == null) return;
 
             try
             {
@@ -205,13 +209,13 @@ namespace BudgetPro.ViewModels
         }
 
         [RelayCommand]
-        public void IncreaseQuantity(BudgetItem item)
+        public async Task IncreaseQuantity(BudgetItem item)
         {
-            if (item == null) return;
+            if (item == null || Budget == null) return;
 
             item.Quantity++;
             item.Updated = DateTime.UtcNow;
-            Budget.Updated = DateTime.UtcNow;
+            await _itemService.UpdateAsync(Budget.Id, item);
 
             // Update the item in the budget's items list as well
             var budgetItem = Budget.BudgetItems?.FirstOrDefault(x => x.Id == item.Id);
@@ -226,13 +230,13 @@ namespace BudgetPro.ViewModels
         }
 
         [RelayCommand]
-        public void DecreaseQuantity(BudgetItem item)
+        public async Task DecreaseQuantity(BudgetItem item)
         {
-            if (item == null || item.Quantity <= 1) return;
+            if (item == null || item.Quantity <= 1 || Budget == null) return;
 
             item.Quantity--;
             item.Updated = DateTime.UtcNow;
-            Budget.Updated = DateTime.UtcNow;
+            await _itemService.UpdateAsync(Budget.Id, item);
 
             // Update the item in the budget's items list as well
             var budgetItem = Budget.BudgetItems?.FirstOrDefault(x => x.Id == item.Id);
@@ -276,7 +280,7 @@ namespace BudgetPro.ViewModels
                 // This is crucial - make sure we're updating the right collection
                 Budget.BudgetItems = new List<BudgetItem>(BudgetItems);
 
-                Console.WriteLine($"Updating budget: {Budget.Id} with {Budget.BudgetItems.Count} items");
+                Console.WriteLine($"Updating budget: {Budget.Id} with {BudgetItems.Count} items");
 
                 // Try normal Firestore service first, then fallback to REST API
                 try

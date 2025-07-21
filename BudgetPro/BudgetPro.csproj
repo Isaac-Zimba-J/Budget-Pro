@@ -86,8 +86,6 @@
                           Version="9.0.60" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug"
                           Version="9.0.4" />
-        <PackageReference Include="Zimba.Maui"
-                          Version="1.0.0" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Converters/" />

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:BudgetPro.ViewModels"
              xmlns:model="clr-namespace:BudgetPro.Models"
-             xmlns:zimba="clr-namespace:Zimba.Maui.Controls;assembly=Zimba.Maui"
              xmlns:mauiKit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewModel:MainPageViewModel"
              x:Class="BudgetPro.MainPage">
@@ -156,7 +155,17 @@
             </ScrollView>
         </RefreshView>
         <!-- Floating Action Button -->
-        <zimba:FAB BackgroundColor="#210F37"
-                   Command="{Binding AddBudgetCommand}" />
+        <Button Text="+"
+                Command="{Binding AddBudgetCommand}"
+                WidthRequest="60"
+                HeightRequest="60"
+                CornerRadius="30"
+                FontSize="32"
+                BackgroundColor="#210F37"
+                TextColor="White"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20"
+                Shadow="10,10,10,Black" />
     </Grid>
 </ContentPage>

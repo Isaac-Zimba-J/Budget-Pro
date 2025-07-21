@@ -37,6 +37,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<IFirestoreService, FirestoreService>();
 		builder.Services.AddSingleton<IUserService, UserService>();
 		builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
+		builder.Services.AddSingleton<ItemService>();
 
 		// Register Firebase Authentication
 		builder.Services.AddSingleton(new FirebaseAuthClient(new FirebaseAuthConfig()

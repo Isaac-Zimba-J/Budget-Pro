@@ -86,12 +86,10 @@ public partial class AddBudgetViewModel : BaseViewModel
                 Description = BudgetDescription,
                 TotalAmount = BudgetAmount,
                 UserId = userId,
-                // Explicitly set DateTimeKind to UTC
-
                 Created = DateTime.UtcNow,
                 Updated = DateTime.UtcNow,
-                IsDeleted = false,
-                BudgetItems = new List<BudgetItem>()
+                IsDeleted = false
+                // Do not set BudgetItems here
             };
 
             // Try REST API approach instead of gRPC if normal approach fails

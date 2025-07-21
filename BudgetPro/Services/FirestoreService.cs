@@ -194,5 +194,48 @@ namespace BudgetPro.Services
 
             throw new Exception("Failed after maximum retry attempts");
         }
+
+        // Subcollection support
+        public async Task<List<T>> GetSubcollectionAsync<T>(string parentCollection, string parentId, string subcollection)
+        {
+            var collectionRef = _firestoreDB.Collection(parentCollection).Document(parentId).Collection(subcollection);
+            var querySnapshot = await collectionRef.GetSnapshotAsync();
+            var items = new List<T>();
+            foreach (var doc in querySnapshot.Documents)
+            {
+                if (doc.Exists)
+                {
+                    items.Add(doc.ConvertTo<T>());
+                }
+            }
+            return items;
+        }
+
+        public async Task<T> GetSubcollectionItemAsync<T>(string parentCollection, string parentId, string subcollection, string itemId)
+        {
+            var docRef = _firestoreDB.Collection(parentCollection).Document(parentId).Collection(subcollection).Document(itemId);
+            var snapshot = await docRef.GetSnapshotAsync();
+            if (snapshot.Exists)
+                return snapshot.ConvertTo<T>();
+            return default;
+        }
+
+        public async Task InsertSubcollectionItemAsync<T>(string parentCollection, string parentId, string subcollection, string itemId, T data)
+        {
+            var docRef = _firestoreDB.Collection(parentCollection).Document(parentId).Collection(subcollection).Document(itemId);
+            await docRef.SetAsync(data);
+        }
+
+        public async Task UpdateSubcollectionItemAsync<T>(string parentCollection, string parentId, string subcollection, string itemId, T data)
+        {
+            var docRef = _firestoreDB.Collection(parentCollection).Document(parentId).Collection(subcollection).Document(itemId);
+            await docRef.SetAsync(data, SetOptions.MergeAll);
+        }
+
+        public async Task DeleteSubcollectionItemAsync(string parentCollection, string parentId, string subcollection, string itemId)
+        {
+            var docRef = _firestoreDB.Collection(parentCollection).Document(parentId).Collection(subcollection).Document(itemId);
+            await docRef.DeleteAsync();
+        }
     }
 }
