@@ -95,12 +95,12 @@
                                                     <Label Text="{Binding Name}"
                                                            Grid.Column="0"
                                                            HorizontalOptions="Start" />
-                                                    <Label Text="76%"
+                                                    <Label Text="{Binding Progress, StringFormat='{0:P0}'}"
                                                            Grid.Column="1"
                                                            HorizontalOptions="End"
                                                            VerticalOptions="End" />
                                                 </Grid>
-                                                <ProgressBar Progress="0.76"
+                                                <ProgressBar Progress="{Binding Progress}"
                                                              ProgressColor="#210F37"
                                                              HeightRequest="10"
                                                              Margin="0,5,0,0" />
