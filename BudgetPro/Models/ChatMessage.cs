@@ -13,6 +13,8 @@ public class ChatMessage : BaseModel
     [FirestoreProperty]
 
     public string UserId { get; set; }
+    [FirestoreProperty]
+    public string UserName { get; set; }
 
     //optional attachment
     [FirestoreProperty]

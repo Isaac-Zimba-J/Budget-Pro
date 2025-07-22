@@ -164,7 +164,7 @@ public partial class TrackinngPageViewModel : BaseViewModel
     [RelayCommand]
     public async Task DecreaseQuantity(BudgetItem item)
     {
-        if (item == null || item.Quantity <= 1 || Budget == null) return;
+        if (item == null || item.Quantity <= 0 || Budget == null) return;
 
         item.Quantity--;
         item.Updated = DateTime.UtcNow;

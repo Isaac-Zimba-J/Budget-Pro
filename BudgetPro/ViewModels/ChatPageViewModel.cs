@@ -52,10 +52,12 @@ public partial class ChatPageViewModel : ObservableObject
     public async Task SendMessage()
     {
         if (string.IsNullOrWhiteSpace(MessageText)) return;
+        var user = _userService.CurrentUser;
         var msg = new ChatMessage
         {
             Text = MessageText,
             UserId = _userService.CurrentUserId,
+            UserName = user?.Email ?? _userService.CurrentUserId,
             Created = DateTime.UtcNow
         };
         await _firestoreService.InsertData("messages", Guid.NewGuid().ToString(), msg);

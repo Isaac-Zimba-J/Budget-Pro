@@ -12,7 +12,7 @@
                 <DataTemplate>
                     <VerticalStackLayout Spacing="2"
                                          HorizontalOptions="{Binding UserId, Converter={StaticResource UserIdToAlignmentConverter}}">
-                        <Label Text="{Binding UserId}"
+                        <Label Text="{Binding UserName}"
                                FontSize="12"
                                FontAttributes="Bold"
                                TextColor="Gray" />
