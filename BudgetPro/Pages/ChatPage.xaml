@@ -6,73 +6,32 @@
     <Grid RowDefinitions="*,Auto"
           Padding="10">
         <!-- Message List -->
-        <ScrollView Grid.Row="0">
-            <VerticalStackLayout x:Name="MessagesLayout"
-                                 Spacing="20">
-                <!-- Example Messages (Insert your real messages here) -->
-                <!-- Incoming -->
-                <VerticalStackLayout HorizontalOptions="Start"
-                                     Spacing="2">
-                    <Label Text="Mubila mwamba "
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="Gray" />
-                    <Border BackgroundColor="#E5E5EA"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 12"
-                            Padding="10"
-                            MaximumWidthRequest="280">
-                        <Label Text="Found millks and eggs at a cheap price of K5,000"
-                               FontSize="14"
-                               TextColor="Black" />
-                    </Border>
-                    <Label Text="19:45 pM"
-                           FontSize="10"
-                           TextColor="Gray" />
-                </VerticalStackLayout>
-                <VerticalStackLayout HorizontalOptions="Start"
-                                     Spacing="2">
-                    <Label Text="Jane Doe"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="Gray" />
-                    <Border BackgroundColor="#E5E5EA"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 12"
-                            Padding="10"
-                            MaximumWidthRequest="280">
-                        <Label Text="Hello! Are we meeting today?"
-                               FontSize="14"
-                               TextColor="Black" />
-                    </Border>
-                    <Label Text="9:15 AM"
-                           FontSize="10"
-                           TextColor="Gray" />
-                </VerticalStackLayout>
-                <!-- Outgoing -->
-                <VerticalStackLayout HorizontalOptions="End"
-                                     Spacing="2">
-                    <Label Text="You"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="Gray"
-                           HorizontalTextAlignment="End" />
-                    <Border BackgroundColor="#210F37"
-                            StrokeThickness="0"
-                            StrokeShape="RoundRectangle 12"
-                            Padding="10"
-                            MaximumWidthRequest="280">
-                        <Label Text="Yes, see you at 11!"
-                               FontSize="14"
-                               TextColor="White" />
-                    </Border>
-                    <Label Text="9:17 AM"
-                           FontSize="10"
-                           TextColor="Gray"
-                           HorizontalTextAlignment="End" />
-                </VerticalStackLayout>
-            </VerticalStackLayout>
-        </ScrollView>
+        <CollectionView Grid.Row="0"
+                        ItemsSource="{Binding Messages}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Spacing="2"
+                                         HorizontalOptions="{Binding UserId, Converter={StaticResource UserIdToAlignmentConverter}}">
+                        <Label Text="{Binding UserId}"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="Gray" />
+                        <Border BackgroundColor="#E5E5EA"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 12"
+                                Padding="10"
+                                MaximumWidthRequest="280">
+                            <Label Text="{Binding Text}"
+                                   FontSize="14"
+                                   TextColor="Black" />
+                        </Border>
+                        <Label Text="{Binding Created, StringFormat='{0:t}'}"
+                               FontSize="10"
+                               TextColor="Gray" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
         <!-- Message Input -->
         <Grid Grid.Row="1"
               ColumnDefinitions="*,Auto"
@@ -88,17 +47,19 @@
                        Placeholder="Type a message..."
                        FontSize="14"
                        BackgroundColor="Transparent"
-                       TextColor="Black" />
+                       TextColor="Black"
+                       Text="{Binding MessageText}" />
             </Border>
             <Button Text="Send"
                     HeightRequest="50"
-                    WidthRequest="50"
+                    WidthRequest="90"
                     Grid.Column="1"
                     BackgroundColor="#210F37"
                     TextColor="White"
                     Padding="15,0"
                     VerticalOptions="Center"
-                    CornerRadius="25" />
+                    CornerRadius="25"
+                    Command="{Binding SendMessageCommand}" />
         </Grid>
     </Grid>
 </ContentPage>

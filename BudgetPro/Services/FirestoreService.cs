@@ -237,5 +237,10 @@ namespace BudgetPro.Services
             var docRef = _firestoreDB.Collection(parentCollection).Document(parentId).Collection(subcollection).Document(itemId);
             await docRef.DeleteAsync();
         }
+
+        public FirestoreDb GetDbInstance()
+        {
+            return _firestoreDB;
+        }
     }
 }

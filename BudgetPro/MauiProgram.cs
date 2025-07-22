@@ -4,6 +4,7 @@ using BudgetPro.Services;
 using BudgetPro.Services.Contracts;
 using BudgetPro.ViewModels;
 using CommunityToolkit.Maui;
+using DotNet.Meteor.HotReload.Plugin;
 using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Google.Cloud.Firestore;
@@ -18,6 +19,9 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+#if DEBUG
+			.EnableHotReload()
+#endif
 			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
@@ -56,6 +60,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<RegisterPage>();
 		builder.Services.AddTransient<EditBudgetPage>();
 		builder.Services.AddTransient<TrackingPage>();
+		builder.Services.AddTransient<ChatPageViewModel>();
 
 
 		// Register view models

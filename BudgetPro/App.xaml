@@ -12,6 +12,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
+            <converters:UserIdToAlignmentConverter x:Key="UserIdToAlignmentConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
