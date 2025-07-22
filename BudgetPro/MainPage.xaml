@@ -128,9 +128,7 @@
                                                                FontSize="16"
                                                                HorizontalOptions="End"
                                                                VerticalOptions="Center" />
-                                                        <Image Source="arrow.png"
-                                                               HorizontalOptions="End"
-                                                               VerticalOptions="Center" />
+                                                        
                                                     </HorizontalStackLayout>
                                                 </Grid>
                                             </VerticalStackLayout>
